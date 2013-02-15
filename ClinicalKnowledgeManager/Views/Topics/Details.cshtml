@@ -1,0 +1,21 @@
+﻿@using ClinicalKnowledgeManager.ViewModels
+@model ClinicalKnowledgeManager.ViewModels.TopicDetail
+
+@{
+    ViewBag.Title = Model.Topic.Name;
+}
+
+<h1>@Html.DisplayFor(model => model.Topic.Name)</h1>
+
+<table>
+    <tr>
+        <td class="tableOfContents">
+            @Html.Partial("TableOfContents")
+        </td>
+        <td>
+            @foreach (var item in Model.SubTopics) {
+                @Html.Partial("~/Views/SubTopics/Details.cshtml", item)
+            }
+        </td>
+    </tr>
+</table>

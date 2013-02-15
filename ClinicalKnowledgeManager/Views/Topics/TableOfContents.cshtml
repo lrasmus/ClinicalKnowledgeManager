@@ -1,0 +1,17 @@
+﻿@using ClinicalKnowledgeManager.ViewModels
+@model ClinicalKnowledgeManager.ViewModels.TopicDetail
+
+<ul>
+    @DisplayTopic(Model.SubTopics, Model.Topic.Name)
+</ul>
+
+@helper DisplayTopic(IEnumerable<SubTopicDetail> subTopics, string topicName) {
+    <li>@Html.ActionLink(topicName, "")</li>
+    if (subTopics != null) { 
+        <ul>
+        @foreach (var subTopic in subTopics) {
+            @DisplayTopic(subTopic.SubTopics, subTopic.SubTopic.Name)
+        }
+        </ul>
+    }
+}

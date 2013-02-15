@@ -1,0 +1,11 @@
+﻿/* File Created: February 12, 2013 */
+.index .topic {
+    padding-bottom: 5px;
+    margin-bottom: 5px;
+    background-color: #f5fffa;
+    width: auto;
+}
+
+td.tableOfContents {
+    padding-right: 20px;
+}

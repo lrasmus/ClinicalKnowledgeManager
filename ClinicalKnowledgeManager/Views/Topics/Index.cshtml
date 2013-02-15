@@ -1,0 +1,16 @@
+﻿@model IEnumerable<ClinicalKnowledgeManager.Models.Topic>
+
+@{
+    ViewBag.Title = "List of Topics";
+}
+
+<h2>List of Topics</h2>
+<div class="index">
+    @foreach (var item in Model) {
+        <div class="topic">
+            @Html.ActionLink(
+            string.Format("{0}   ({1})", item.Name, item.Audience), 
+            "Details", new { id = item.Id })
+        </div>
+    }
+</div>
