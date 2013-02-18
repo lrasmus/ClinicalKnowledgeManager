@@ -9,6 +9,8 @@ using ClinicalKnowledgeManager.Models;
 using ClinicalKnowledgeManager.DB;
 using ClinicalKnowledgeManager.ViewModels;
 using ClinicalKnowledgeManager.Helpers;
+using CodeFirstStoredProcedures;
+using HL7InfobuttonAPI;
 
 namespace ClinicalKnowledgeManager.Controllers
 {
@@ -23,11 +25,30 @@ namespace ClinicalKnowledgeManager.Controllers
         }
 
         //
-        // GET: /Topic/
+        // GET: /Topics/
 
         public ActionResult Index()
         {
-            return View(Context.Topics.ToList());
+            return View(Factory.BuildTopicDetails(Context.Topics.ToList()));
+        }
+
+        //
+        // GET: /Topics/Search
+        public ActionResult Search()
+        {
+            var parser = new Parser();
+            var request = parser.ParseRequest(Request.QueryString);
+            var mapper = new QueryMapper(request);
+
+            var storedProc = new SearchForTopicsBasedOnContext()
+                {
+                    InformationRecipient = mapper.GetInformationRecipient(),
+                    SearchCode = mapper.GetSearchCode(),
+                    SearchCodeSystem = mapper.GetSearchCodeSystem()
+                };
+            var result = Context.Database.ExecuteStoredProcedure(storedProc);
+
+            return View(Factory.BuildTopicDetails(result.ToList()));
         }
 
         //

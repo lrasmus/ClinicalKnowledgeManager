@@ -74,5 +74,14 @@ namespace ClinicalKnowledgeManager.Helpers
 
             return subTopicDetail;
         }
+
+        public IEnumerable<TopicDetail> BuildTopicDetails(List<Topic> list)
+        {
+            return list.Select(x => new TopicDetail()
+                {
+                    Topic = x,
+                    SubTopics = BuildSubTopicsForTopic(x)
+                });
+        }
     }
 }

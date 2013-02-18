@@ -33,6 +33,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="EntityFramework, Version=4.4.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.5.0.0\lib\net40\EntityFramework.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
     <Reference Include="System" />
@@ -97,7 +100,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="TestBase.cs" />
+    <Compile Include="InitializerForTesting.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SearchForTopicsBasedOnContextTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="App.config" />
@@ -109,6 +115,10 @@
     <ProjectReference Include="..\ClinicalKnowledgeManager\ClinicalKnowledgeManager.csproj">
       <Project>{3A189E9E-120A-4F41-BC6C-8FEDF550EDEF}</Project>
       <Name>ClinicalKnowledgeManager</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CodeFirstStoredProcedures\CodeFirstStoredProcedures\CodeFirstStoredProcedures.csproj">
+      <Project>{5FD31722-1512-430A-AD51-C05072267E3D}</Project>
+      <Name>CodeFirstStoredProcedures</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

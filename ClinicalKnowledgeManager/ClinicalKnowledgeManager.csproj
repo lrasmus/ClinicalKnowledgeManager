@@ -124,6 +124,8 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\SubTopicsController.cs" />
     <Compile Include="Controllers\TopicsController.cs" />
+    <Compile Include="DB\SearchForTopicsBasedOnContext.cs" />
+    <Compile Include="Helpers\QueryMapper.cs" />
     <Compile Include="Helpers\ViewModelFactory.cs" />
     <Compile Include="Migrations\201302122206453_InitialCreate.cs" />
     <Compile Include="Migrations\201302122206453_InitialCreate.Designer.cs">
@@ -132,6 +134,14 @@
     <Compile Include="Migrations\201302122210227_Updates.cs" />
     <Compile Include="Migrations\201302122210227_Updates.Designer.cs">
       <DependentUpon>201302122210227_Updates.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201302151604446_SetFeldLengths.cs" />
+    <Compile Include="Migrations\201302151604446_SetFeldLengths.Designer.cs">
+      <DependentUpon>201302151604446_SetFeldLengths.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201302151729392_RenameCodeSetToCodeSystem.cs" />
+    <Compile Include="Migrations\201302151729392_RenameCodeSetToCodeSystem.Designer.cs">
+      <DependentUpon>201302151729392_RenameCodeSetToCodeSystem.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\ConceptMap.cs" />
@@ -203,6 +213,7 @@
     <Content Include="Content\themes\base\minified\jquery.ui.slider.min.css" />
     <Content Include="Content\themes\base\minified\jquery.ui.tabs.min.css" />
     <Content Include="Content\themes\base\minified\jquery.ui.theme.min.css" />
+    <EmbeddedResource Include="DB\Scripts\SearchForTopicsBasedOnContext.sql" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
     <Content Include="Scripts\jquery-1.7.1-vsdoc.js" />
@@ -244,6 +255,10 @@
       <Project>{2B5C496E-D58A-456E-BF76-60644CF7E41B}</Project>
       <Name>HL7InfobuttonAPI</Name>
     </ProjectReference>
+    <ProjectReference Include="..\CodeFirstStoredProcedures\CodeFirstStoredProcedures\CodeFirstStoredProcedures.csproj">
+      <Project>{5FD31722-1512-430A-AD51-C05072267E3D}</Project>
+      <Name>CodeFirstStoredProcedures</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Topics\Index.cshtml" />
@@ -269,6 +284,8 @@
     <Content Include="Views\SubTopics\Edit.cshtml" />
     <Content Include="Views\SubTopics\Delete.cshtml" />
     <Content Include="Views\Topics\TableOfContents.cshtml" />
+    <Content Include="Views\Topics\Search.cshtml" />
+    <Content Include="Views\Topics\TopicList.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201302122206453_InitialCreate.resx">
@@ -276,6 +293,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201302122210227_Updates.resx">
       <DependentUpon>201302122210227_Updates.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201302151604446_SetFeldLengths.resx">
+      <DependentUpon>201302151604446_SetFeldLengths.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201302151729392_RenameCodeSetToCodeSystem.resx">
+      <DependentUpon>201302151729392_RenameCodeSetToCodeSystem.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
