@@ -6,3 +6,5 @@ TestResults
 packages
 bin
 obj
+Research
+*.vsmdi
