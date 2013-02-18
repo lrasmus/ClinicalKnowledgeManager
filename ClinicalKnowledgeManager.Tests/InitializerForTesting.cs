@@ -49,6 +49,7 @@ namespace ClinicalKnowledgeManager.Tests
             context.ConceptMaps.Add(new ConceptMap() { Code = "PAT", ParentId = 4, ParentType = "Topic", CreatedOn = DateTime.Now, CodeSystem = "informationRecipient" });
             context.ConceptMaps.Add(new ConceptMap() { Code = "424500005", ParentId = 3, ParentType = "SubTopic", CreatedOn = DateTime.Now, CodeSystem = "2.16.840.1.113883.6.96" });
             context.ConceptMaps.Add(new ConceptMap() { Code = "424500005", ParentId = 3, ParentType = "Topic", CreatedOn = DateTime.Now, CodeSystem = "2.16.840.1.113883.6.96" });
+            context.ConceptMaps.Add(new ConceptMap() { Code = "424500005", ParentId = 4, ParentType = "Topic", CreatedOn = DateTime.Now, CodeSystem = "2.16.840.1.113883.6.1" });
 
             context.SaveChanges();
         }
