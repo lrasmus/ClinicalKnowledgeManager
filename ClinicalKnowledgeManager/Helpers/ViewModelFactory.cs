@@ -42,7 +42,7 @@ namespace ClinicalKnowledgeManager.Helpers
                 Level = level,
                 SubTopic = x,
                 Contents = Context.Contents.Where(c => c.ParentType == "SubTopic" && c.ParentId == x.Id).Select(c => c.Value).ToList()
-            });
+            }).ToList();
 
             foreach (var child in subTopic.SubTopics)
             {
@@ -80,7 +80,7 @@ namespace ClinicalKnowledgeManager.Helpers
             return list.Select(x => new TopicDetail()
                 {
                     Topic = x,
-                    SubTopics = BuildSubTopicsForTopic(x)
+                    SubTopics = BuildSubTopicsForTopic(x).ToList()
                 });
         }
     }

@@ -6,7 +6,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ClinicalKnowledgeManager.DB;
 using CodeFirstStoredProcedures;
 
-namespace ClinicalKnowledgeManager.Tests
+namespace ClinicalKnowledgeManager.Tests.DB
 {
     [TestClass]
     public class GetSubTopicsForContextTests : TestBase

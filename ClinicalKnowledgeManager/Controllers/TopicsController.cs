@@ -73,11 +73,17 @@ namespace ClinicalKnowledgeManager.Controllers
             };
             var result = Context.Database.ExecuteStoredProcedure(storedProc).ToList();
 
-            TopicDetail details = new TopicDetail()
+            var details = new TopicDetail()
                 {
                     Topic = topic,
-                    SubTopics = Factory.BuildSubTopicsForTopic(topic)
+                    SubTopics = Factory.BuildSubTopicsForTopic(topic).ToList(),
+                    ContextSubTopics = result
                 };
+
+            foreach (var subTopic in details.SubTopics)
+            {
+                FlagContextSubTopics(subTopic, result);
+            }
 
             return View(details);
         }
@@ -172,5 +178,29 @@ namespace ClinicalKnowledgeManager.Controllers
             var mapper = new QueryMapper(request);
             return mapper;
         }
+
+        /// <summary>
+        /// Recursively look at a subtopic and it's subtopics and determine if any of them should be visible because of
+        /// the request context.  A few notes about how we flag items:
+        ///  - Ancestors of a context item are also flagged so they are visible
+        ///  - If no context sub-topics exist, everything is flagged as context
+        /// </summary>
+        /// <param name="detail"></param>
+        /// <param name="result"></param>
+        /// <returns></returns>
+        private bool FlagContextSubTopics(SubTopicDetail detail, List<SubTopic> result)
+        {
+            detail.IsContextItem = (result.Count == 0 || result.Count(x => x.Id == detail.SubTopic.Id) > 0);
+
+            if (detail.SubTopics != null)
+            {
+                bool flaggedChild = false;
+                flaggedChild = detail.SubTopics.Select(subTopic => FlagContextSubTopics(subTopic, result)).Aggregate(flaggedChild, (current, recentFlag) => current || recentFlag);
+                detail.IsContextItem = detail.IsContextItem || flaggedChild;
+            }
+
+            return detail.IsContextItem;
+        }
+
     }
 }

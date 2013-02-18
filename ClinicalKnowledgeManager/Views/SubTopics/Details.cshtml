@@ -5,6 +5,8 @@
     @Html.ActionLink("View full topic", "Details", "Topics", new { id = Model.SubTopic.ParentId }, null)
 }*@
 
+<div class="subTopicContainer @(Model.IsContextItem ? "contextItem" : "")">
+
 @Html.Raw(string.Format("<h{1}>{0}</h{1}>", Html.DisplayFor(modelItem => Model.SubTopic.Name), Model.Level))
 @foreach (var content in Model.Contents){
     <div>
@@ -17,3 +19,5 @@
         @Html.Partial("~/Views/SubTopics/Details.cshtml", subTopic)
     }
 }
+
+</div>

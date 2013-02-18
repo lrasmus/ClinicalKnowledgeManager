@@ -13,5 +13,6 @@ namespace ClinicalKnowledgeManager.ViewModels
         public IEnumerable<string> Contents { get; set; }
         public IEnumerable<SubTopicDetail> SubTopics { get; set; }
         public bool IsOnlyItemDisplayed { get; set; }
+        public bool IsContextItem { get; set; }
     }
 }

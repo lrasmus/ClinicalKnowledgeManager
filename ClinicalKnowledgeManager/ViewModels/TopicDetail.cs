@@ -10,5 +10,6 @@ namespace ClinicalKnowledgeManager.ViewModels
     {
         public Topic Topic { get; set; }
         public IEnumerable<SubTopicDetail> SubTopics { get; set; }
+        public IEnumerable<SubTopic> ContextSubTopics { get; set; }
     }
 }
