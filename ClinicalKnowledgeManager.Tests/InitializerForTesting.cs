@@ -29,6 +29,8 @@ namespace ClinicalKnowledgeManager.Tests
             Assembly thisAssembly = Assembly.Load("ClinicalKnowledgeManager");
             string script = (new StreamReader(thisAssembly.GetManifestResourceStream("ClinicalKnowledgeManager.DB.Scripts.SearchForTopicsBasedOnContext.sql"))).ReadToEnd();
             context.Database.ExecuteSqlCommand(script);
+            script = (new StreamReader(thisAssembly.GetManifestResourceStream("ClinicalKnowledgeManager.DB.Scripts.GetSubTopicsForContext.sql"))).ReadToEnd();
+            context.Database.ExecuteSqlCommand(script);
 
             context.Topics.Add(new Topic() { Name = "Clopidogrel", Audience = "Physician", CreatedOn = DateTime.Now });
             context.Topics.Add(new Topic() { Name = "Warfarin", Audience = "Physician", CreatedOn = DateTime.Now });

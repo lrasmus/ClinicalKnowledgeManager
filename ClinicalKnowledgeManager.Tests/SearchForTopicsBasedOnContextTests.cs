@@ -12,7 +12,7 @@ namespace ClinicalKnowledgeManager.Tests
     public class SearchForTopicsBasedOnContextTests : TestBase
     {
         [TestMethod]
-        public void FindAny()
+        public void NoParamsSpecified()
         {
             var storedProc = new SearchForTopicsBasedOnContext() { InformationRecipient = "", SearchCode = "", SearchCodeSystem = "" };
             var result = DataContext.Database.ExecuteStoredProcedure(storedProc);

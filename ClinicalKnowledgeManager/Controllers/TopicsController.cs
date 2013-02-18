@@ -36,17 +36,18 @@ namespace ClinicalKnowledgeManager.Controllers
         // GET: /Topics/Search
         public ActionResult Search()
         {
-            var parser = new Parser();
-            var request = parser.ParseRequest(Request.QueryString);
-            var mapper = new QueryMapper(request);
-
+            var mapper = BuildMapperFromQueryString();
             var storedProc = new SearchForTopicsBasedOnContext()
                 {
                     InformationRecipient = mapper.GetInformationRecipient(),
                     SearchCode = mapper.GetSearchCode(),
                     SearchCodeSystem = mapper.GetSearchCodeSystem()
                 };
-            var result = Context.Database.ExecuteStoredProcedure(storedProc);
+            var result = Context.Database.ExecuteStoredProcedure(storedProc).ToList();
+            if (result.Count == 1)
+            {
+                return Redirect(Url.Action("Details", new { id = result.First().Id }) + "?" + Request.QueryString);
+            }
 
             return View(Factory.BuildTopicDetails(result.ToList()));
         }
@@ -61,6 +62,16 @@ namespace ClinicalKnowledgeManager.Controllers
             {
                 return HttpNotFound();
             }
+
+            var mapper = BuildMapperFromQueryString();
+            var storedProc = new GetSubTopicsForContext()
+            {
+                TopicID = id,
+                InformationRecipient = mapper.GetInformationRecipient(),
+                SearchCode = mapper.GetSearchCode(),
+                SearchCodeSystem = mapper.GetSearchCodeSystem()
+            };
+            var result = Context.Database.ExecuteStoredProcedure(storedProc).ToList();
 
             TopicDetail details = new TopicDetail()
                 {
@@ -152,6 +163,14 @@ namespace ClinicalKnowledgeManager.Controllers
         {
             Context.Dispose();
             base.Dispose(disposing);
+        }
+
+        private QueryMapper BuildMapperFromQueryString()
+        {
+            var parser = new Parser();
+            var request = parser.ParseRequest(Request.QueryString);
+            var mapper = new QueryMapper(request);
+            return mapper;
         }
     }
 }

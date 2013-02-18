@@ -124,6 +124,8 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\SubTopicsController.cs" />
     <Compile Include="Controllers\TopicsController.cs" />
+    <Compile Include="DB\GetSubTopicsForContext.cs" />
+    <Compile Include="DB\IContextQuery.cs" />
     <Compile Include="DB\SearchForTopicsBasedOnContext.cs" />
     <Compile Include="Helpers\QueryMapper.cs" />
     <Compile Include="Helpers\ViewModelFactory.cs" />
@@ -214,6 +216,7 @@
     <Content Include="Content\themes\base\minified\jquery.ui.tabs.min.css" />
     <Content Include="Content\themes\base\minified\jquery.ui.theme.min.css" />
     <EmbeddedResource Include="DB\Scripts\SearchForTopicsBasedOnContext.sql" />
+    <EmbeddedResource Include="DB\Scripts\GetSubTopicsForContext.sql" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
     <Content Include="Scripts\jquery-1.7.1-vsdoc.js" />
