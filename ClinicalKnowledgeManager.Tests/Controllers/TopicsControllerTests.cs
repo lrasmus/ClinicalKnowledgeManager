@@ -15,10 +15,12 @@ namespace ClinicalKnowledgeManager.Tests.Controllers
     [TestClass]
     public class TopicsControllerTests : TestBase
     {
+        protected const string ContextName = "CKMDB.Test";
+
         [TestMethod]
         public void Index()
         {
-            var controller = new TopicsController();
+            var controller = new TopicsController(ContextName);
             var result = controller.Index() as ViewResult;
             Assert.IsNotNull(result);
             Assert.IsNotNull(result.Model);
@@ -30,7 +32,7 @@ namespace ClinicalKnowledgeManager.Tests.Controllers
         [TestMethod]
         public void Search_ReturnSingle()
         {
-            var controller = new TopicsController();
+            var controller = new TopicsController(ContextName);
             SetControllerContext(controller, "mainSearchCriteria.v.cs=2.16.840.1.113883.6.96&mainSearchCriteria.v.c=424500005&informationRecipient=PROV");
             var result = controller.Search() as RedirectResult;
             Assert.IsNotNull(result);
@@ -39,19 +41,20 @@ namespace ClinicalKnowledgeManager.Tests.Controllers
         [TestMethod]
         public void Search_ReturnMultiple()
         {
-            var controller = new TopicsController();
+            var controller = new TopicsController(ContextName);
             SetControllerContext(controller, "informationRecipient=PROV");
             var result = controller.Search() as ViewResult;
             Assert.IsNotNull(result);
-            var model = result.Model as IEnumerable<TopicDetail>;
+            var model = result.Model as ViewModels.TopicSearchResult;
             Assert.IsNotNull(model);
-            Assert.AreEqual(2, model.Count());
+            Assert.AreEqual(2, model.Topics.Count());
+            Assert.AreEqual("PROV", model.ContextQuery.InformationRecipient);
         }
 
         [TestMethod]
         public void Details()
         {
-            var controller = new TopicsController();
+            var controller = new TopicsController(ContextName);
             SetControllerContext(controller, "mainSearchCriteria.v.cs=2.16.840.1.113883.6.96&mainSearchCriteria.v.c=424500005&informationRecipient=PROV");
             var result = controller.Details(1) as ViewResult;
             Assert.IsNotNull(result);
@@ -68,7 +71,7 @@ namespace ClinicalKnowledgeManager.Tests.Controllers
         [TestMethod]
         public void Details_ContextFlags()
         {
-            var controller = new TopicsController();
+            var controller = new TopicsController(ContextName);
             SetControllerContext(controller, "mainSearchCriteria.v.cs=2.16.840.1.113883.6.96&mainSearchCriteria.v.c=424500005&informationRecipient=PROV");
             var result = controller.Details(1) as ViewResult;
             var model = result.Model as TopicDetail;

@@ -24,6 +24,12 @@ namespace ClinicalKnowledgeManager.Controllers
             Factory = new ViewModelFactory(Context);
         }
 
+        public TopicsController(string contextName)
+        {
+            Context = new ModelContext(contextName);
+            Factory = new ViewModelFactory(Context);
+        }
+
         //
         // GET: /Topics/
 
@@ -41,7 +47,12 @@ namespace ClinicalKnowledgeManager.Controllers
                 {
                     InformationRecipient = mapper.GetInformationRecipient(),
                     SearchCode = mapper.GetSearchCode(),
-                    SearchCodeSystem = mapper.GetSearchCodeSystem()
+                    SearchCodeSystem = mapper.GetSearchCodeSystem(),
+                    Task = mapper.GetTaskCode(),
+                    SubTopicCode = mapper.GetSubTopicCode(),
+                    SubTopicCodeSystem = mapper.GetSubTopicCodeSystem(),
+                    Gender = mapper.GetGender(),
+                    AgeGroup = mapper.GetAge()
                 };
             var result = Context.Database.ExecuteStoredProcedure(storedProc).ToList();
             if (result.Count == 1)
@@ -49,7 +60,10 @@ namespace ClinicalKnowledgeManager.Controllers
                 return Redirect(Url.Action("Details", new { id = result.First().Id }) + "?" + Request.QueryString);
             }
 
-            return View(Factory.BuildTopicDetails(result.ToList()));
+            return View(new TopicSearchResult() {
+                Topics = Factory.BuildTopicDetails(result.ToList()),
+                ContextQuery = storedProc
+                });
         }
 
         //
@@ -69,7 +83,12 @@ namespace ClinicalKnowledgeManager.Controllers
                 TopicID = id,
                 InformationRecipient = mapper.GetInformationRecipient(),
                 SearchCode = mapper.GetSearchCode(),
-                SearchCodeSystem = mapper.GetSearchCodeSystem()
+                SearchCodeSystem = mapper.GetSearchCodeSystem(),
+                Task = mapper.GetTaskCode(),
+                SubTopicCode = mapper.GetSubTopicCode(),
+                SubTopicCodeSystem = mapper.GetSubTopicCodeSystem(),
+                Gender = mapper.GetGender(),
+                AgeGroup = mapper.GetAge()
             };
             var result = Context.Database.ExecuteStoredProcedure(storedProc).ToList();
 
@@ -77,7 +96,8 @@ namespace ClinicalKnowledgeManager.Controllers
                 {
                     Topic = topic,
                     SubTopics = Factory.BuildSubTopicsForTopic(topic).ToList(),
-                    ContextSubTopics = result
+                    ContextSubTopics = result,
+                    ContextQuery = storedProc
                 };
 
             foreach (var subTopic in details.SubTopics)

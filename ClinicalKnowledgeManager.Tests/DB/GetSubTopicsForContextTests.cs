@@ -29,5 +29,16 @@ namespace ClinicalKnowledgeManager.Tests.DB
             Assert.AreEqual(2, result[0].ParentId);
             Assert.AreEqual("SubTopic", result[0].ParentType);
         }
+
+        [TestMethod]
+        public void ParamSpecified_SubTopic()
+        {
+            var storedProc = new GetSubTopicsForContext() { TopicID = 1, SubTopicCode = "Q000628", SubTopicCodeSystem = "2.16.840.1.113883.6.177" };
+            var result = DataContext.Database.ExecuteStoredProcedure(storedProc).ToArray();
+            Assert.AreEqual(1, result.Count());
+            Assert.AreEqual(2, result[0].Id);
+            Assert.AreEqual(1, result[0].ParentId);
+            Assert.AreEqual("Topic", result[0].ParentType);
+        }
     }
 }
