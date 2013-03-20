@@ -26,7 +26,7 @@ namespace ClinicalKnowledgeManager.Tests.Controllers
             Assert.IsNotNull(result.Model);
             var model = result.Model as IEnumerable<TopicDetail>;
             Assert.IsNotNull(model);
-            Assert.AreEqual(4, model.Count());
+            Assert.AreEqual(5, model.Count());
         }
 
         [TestMethod]

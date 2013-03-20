@@ -111,5 +111,67 @@ namespace ClinicalKnowledgeManager.Helpers
 
             return Query.PatientContext.AgeGroup.Value.Code;
         }
+
+        public string GetPerformerLanguage()
+        {
+            if (Query.Performer == null
+                || Query.Performer.LanguageCode == null
+                || string.IsNullOrWhiteSpace(Query.Performer.LanguageCode.Code))
+            {
+                return string.Empty;
+            }
+
+            return Query.Performer.LanguageCode.Code;
+        }
+
+        public string GetRecipientLanguage()
+        {
+            if (Query.InformationRecipient == null
+                || Query.InformationRecipient.LanguageCode == null
+                || string.IsNullOrWhiteSpace(Query.InformationRecipient.LanguageCode.Code))
+            {
+                return string.Empty;
+            }
+
+            return Query.InformationRecipient.LanguageCode.Code;
+        }
+
+        public string GetPerformerProviderCode()
+        {
+            if (Query.Performer == null
+                || Query.Performer.HealthCareProvider == null
+                || Query.Performer.HealthCareProvider.Code == null
+                || string.IsNullOrWhiteSpace(Query.Performer.HealthCareProvider.Code.Code))
+            {
+                return string.Empty;
+            }
+
+            return Query.Performer.HealthCareProvider.Code.Code;
+        }
+
+        public string GetRecipientProviderCode()
+        {
+            if (Query.InformationRecipient == null
+                || Query.InformationRecipient.HealthCareProvider == null
+                || Query.InformationRecipient.HealthCareProvider.Code == null
+                || string.IsNullOrWhiteSpace(Query.InformationRecipient.HealthCareProvider.Code.Code))
+            {
+                return string.Empty;
+            }
+
+            return Query.InformationRecipient.HealthCareProvider.Code.Code;
+        }
+
+        public string GetEncounterCode()
+        {
+            if (Query.Encounter == null
+                || Query.Encounter.Code == null
+                || string.IsNullOrWhiteSpace(Query.Encounter.Code.Code))
+            {
+                return string.Empty;
+            }
+
+            return Query.Encounter.Code.Code;
+        }
     }
 }

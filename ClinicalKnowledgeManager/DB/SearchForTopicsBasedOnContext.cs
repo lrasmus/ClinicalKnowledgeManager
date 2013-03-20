@@ -19,6 +19,11 @@ namespace ClinicalKnowledgeManager.DB
             SubTopicCodeSystem = string.Empty;
             Gender = string.Empty;
             AgeGroup = string.Empty;
+            PerformerLanguage = string.Empty;
+            RecipientLanguage = string.Empty;
+            PerformerProviderCode = string.Empty;
+            RecipientProviderCode = string.Empty;
+            EncounterCode = string.Empty;
         }
 
         public string InformationRecipient { get; set; }
@@ -29,5 +34,10 @@ namespace ClinicalKnowledgeManager.DB
         public string SubTopicCodeSystem { get; set; }
         public string Gender { get; set; }
         public string AgeGroup { get; set; }
+        public string PerformerLanguage { get; set; }
+        public string RecipientLanguage { get; set; }
+        public string PerformerProviderCode { get; set; }
+        public string RecipientProviderCode { get; set; }
+        public string EncounterCode { get; set; }
     }
 }

@@ -52,7 +52,12 @@ namespace ClinicalKnowledgeManager.Controllers
                     SubTopicCode = mapper.GetSubTopicCode(),
                     SubTopicCodeSystem = mapper.GetSubTopicCodeSystem(),
                     Gender = mapper.GetGender(),
-                    AgeGroup = mapper.GetAge()
+                    AgeGroup = mapper.GetAge(),
+                    PerformerLanguage = mapper.GetPerformerLanguage(),
+                    RecipientLanguage = mapper.GetRecipientLanguage(),
+                    PerformerProviderCode = mapper.GetPerformerProviderCode(),
+                    RecipientProviderCode = mapper.GetRecipientProviderCode(),
+                    EncounterCode = mapper.GetEncounterCode()
                 };
             var result = Context.Database.ExecuteStoredProcedure(storedProc).ToList();
             if (result.Count == 1)
