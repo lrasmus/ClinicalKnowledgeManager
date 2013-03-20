@@ -14,7 +14,12 @@ CREATE PROCEDURE spGetSubTopicsForContext
 	@sub_topic_code NVARCHAR(255),
 	@sub_topic_code_system NVARCHAR(255),
 	@gender NVARCHAR(10),
-	@age_group NVARCHAR(255)
+	@age_group NVARCHAR(255),
+    @performer_language_code NVARCHAR(255),
+    @recipient_language_code NVARCHAR(255),
+    @performer_provider_code NVARCHAR(255),
+    @recipient_provider_code NVARCHAR(255),
+	@encounter_code NVARCHAR(255)
 AS
 BEGIN
 	-- SET NOCOUNT ON added to prevent extra result sets from
@@ -86,6 +91,46 @@ BEGIN
             INNER JOIN dbo.ConceptMaps cmir ON (cmir.ParentType = 'SubTopic' AND cmir.ParentId = s.Id)
         WHERE 
             (cmir.Code = @age_group AND cmir.CodeSystem = '2.16.840.1.113883.6.177')
+
+        UNION ALL
+
+        SELECT s.id, 'performerLanguage' AS [Context]
+        FROM dbo.SubTopics s
+            INNER JOIN dbo.ConceptMaps cmir ON (cmir.ParentType = 'SubTopic' AND cmir.ParentId = s.Id)
+        WHERE 
+            (cmir.Code = @performer_language_code AND cmir.CodeSystem = '2.16.840.1.113883.6.121')
+
+        UNION ALL
+
+        SELECT s.id, 'recipientLanguage' AS [Context]
+        FROM dbo.SubTopics s
+            INNER JOIN dbo.ConceptMaps cmir ON (cmir.ParentType = 'SubTopic' AND cmir.ParentId = s.Id)
+        WHERE 
+            (cmir.Code = @recipient_language_code AND cmir.CodeSystem = '2.16.840.1.113883.6.121')
+
+        UNION ALL
+
+        SELECT s.id, 'performerProviderCode' AS [Context]
+        FROM dbo.SubTopics s
+            INNER JOIN dbo.ConceptMaps cmir ON (cmir.ParentType = 'SubTopic' AND cmir.ParentId = s.Id)
+        WHERE 
+            (cmir.Code = @performer_provider_code AND cmir.CodeSystem = '2.16.840.1.113883.6.101')
+
+        UNION ALL
+
+        SELECT s.id, 'recipientProviderCode' AS [Context]
+        FROM dbo.SubTopics s
+            INNER JOIN dbo.ConceptMaps cmir ON (cmir.ParentType = 'SubTopic' AND cmir.ParentId = s.Id)
+        WHERE 
+            (cmir.Code = @recipient_provider_code AND cmir.CodeSystem = '2.16.840.1.113883.6.101')
+
+		UNION ALL
+
+        SELECT s.id, 'encounter' AS [Context]
+        FROM dbo.SubTopics s
+            INNER JOIN dbo.ConceptMaps cmir ON (cmir.ParentType = 'SubTopic' AND cmir.ParentId = s.Id)
+        WHERE 
+            (cmir.Code = @encounter_code AND cmir.CodeSystem = '2.16.840.1.113883.5.4')
     )
     AS MatchingSubTopics;
     
