@@ -1,8 +1,12 @@
-﻿@model IEnumerable<ClinicalKnowledgeManager.ViewModels.TopicDetail>
+﻿@using ClinicalKnowledgeManager.ViewModels
+@model ClinicalKnowledgeManager.ViewModels.TopicSearchResult
 
 @{
     ViewBag.Title = "Search";
 }
 
 <h2>Search</h2>
-@Html.Partial("TopicList")
+@if (Model.ContextQuery != null) {
+    @Html.Partial("FilterDescription", new ContextFilter(Model.ContextQuery));
+}
+@Html.Partial("TopicList", Model.Topics)

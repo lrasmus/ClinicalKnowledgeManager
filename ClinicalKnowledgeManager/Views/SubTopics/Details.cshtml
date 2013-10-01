@@ -6,18 +6,21 @@
 }*@
 
 <div class="subTopicContainer @(Model.IsContextItem ? "contextItem" : "")">
-
-@Html.Raw(string.Format("<h{1}>{0}</h{1}>", Html.DisplayFor(modelItem => Model.SubTopic.Name), Model.Level))
-@foreach (var content in Model.Contents){
-    <div>
-        @Html.Raw(content)
+    <div class="subTopicName @(Model.IsContextItem ? "contextItem" : "")" data-subtopic-id="@Model.SubTopic.Id">
+        @Html.Raw(string.Format("<h{1}>{0}</h{1}>", Html.DisplayFor(modelItem => Model.SubTopic.Name), Model.Level))
     </div>
-}
+    
+    <div class="subTopicContent @(Model.IsContextItem ? "contextItem" : "nonContextItem")" id="subTopicContent-@Model.SubTopic.Id">
+        @foreach (var content in Model.Contents){
+            <div>
+                @Html.Raw(content)
+            </div>
+        }
 
-@if (Model.SubTopics != null) { 
-    foreach (var subTopic in Model.SubTopics) {
-        @Html.Partial("~/Views/SubTopics/Details.cshtml", subTopic)
-    }
-}
-
+        @if (Model.SubTopics != null) { 
+            foreach (var subTopic in Model.SubTopics) {
+                @Html.Partial("~/Views/SubTopics/Details.cshtml", subTopic)
+            }
+        }
+    </div>
 </div>

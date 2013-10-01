@@ -36,12 +36,15 @@ namespace ClinicalKnowledgeManager.Tests
             context.Topics.Add(new Topic() { Name = "Warfarin", Audience = "Physician", CreatedOn = DateTime.Now });
             context.Topics.Add(new Topic() { Name = "Clopidogrel", Audience = "Patient", CreatedOn = DateTime.Now });
             context.Topics.Add(new Topic() { Name = "Warfarin", Audience = "Patient", CreatedOn = DateTime.Now });
+            context.Topics.Add(new Topic() { Name = "Espanol Warfarin", Audience = "Patient", CreatedOn = DateTime.Now });
 
             context.SubTopics.Add(new SubTopic() {Name = "Summary", ParentId = 1, ParentType = "Topic", CreatedOn = DateTime.Now});
             context.SubTopics.Add(new SubTopic() {Name = "Management", ParentId = 1, ParentType = "Topic", CreatedOn = DateTime.Now});
             context.SubTopics.Add(new SubTopic() {Name = "Poor Metabolizers", ParentId = 2, ParentType = "SubTopic", CreatedOn = DateTime.Now});
             context.SubTopics.Add(new SubTopic() {Name = "Intermediate Metabolizers", ParentId = 2, ParentType = "SubTopic", CreatedOn = DateTime.Now});
             context.SubTopics.Add(new SubTopic() {Name = "Normal Metabolizers", ParentId = 2, ParentType = "SubTopic", CreatedOn = DateTime.Now});
+            context.SubTopics.Add(new SubTopic() {Name = "Femal Treatment", ParentId = 2, ParentType = "SubTopic", CreatedOn = DateTime.Now});
+            context.SubTopics.Add(new SubTopic() {Name = "Middle Age", ParentId = 3, ParentType = "Topic", CreatedOn = DateTime.Now});
 
             context.ConceptMaps.Add(new ConceptMap() { Code = "MLREV", ParentId = 1, ParentType = "Topic", CreatedOn = DateTime.Now, CodeSystem = "2.16.840.1.113883.5.4" });
             context.ConceptMaps.Add(new ConceptMap() { Code = "MLREV", ParentId = 2, ParentType = "Topic", CreatedOn = DateTime.Now, CodeSystem = "2.16.840.1.113883.5.4" });
@@ -52,6 +55,17 @@ namespace ClinicalKnowledgeManager.Tests
             context.ConceptMaps.Add(new ConceptMap() { Code = "424500005", ParentId = 3, ParentType = "SubTopic", CreatedOn = DateTime.Now, CodeSystem = "2.16.840.1.113883.6.96" });
             context.ConceptMaps.Add(new ConceptMap() { Code = "424500005", ParentId = 3, ParentType = "Topic", CreatedOn = DateTime.Now, CodeSystem = "2.16.840.1.113883.6.96" });
             context.ConceptMaps.Add(new ConceptMap() { Code = "424500005", ParentId = 4, ParentType = "Topic", CreatedOn = DateTime.Now, CodeSystem = "2.16.840.1.113883.6.1" });
+            context.ConceptMaps.Add(new ConceptMap() { Code = "Q000175", ParentId = 3, ParentType = "SubTopic", CreatedOn = DateTime.Now, CodeSystem = "2.16.840.1.113883.6.177" });
+            context.ConceptMaps.Add(new ConceptMap() { Code = "Q000628", ParentId = 2, ParentType = "SubTopic", CreatedOn = DateTime.Now, CodeSystem = "2.16.840.1.113883.6.177" });
+            context.ConceptMaps.Add(new ConceptMap() { Code = "Q000175", ParentId = 2, ParentType = "Topic", CreatedOn = DateTime.Now, CodeSystem = "2.16.840.1.113883.6.177" });
+            context.ConceptMaps.Add(new ConceptMap() { Code = "F", ParentId = 6, ParentType = "SubTopic", CreatedOn = DateTime.Now, CodeSystem = "2.16.840.1.113883.5.1" });
+            context.ConceptMaps.Add(new ConceptMap() { Code = "D008875", ParentId = 7, ParentType = "SubTopic", CreatedOn = DateTime.Now, CodeSystem = "2.16.840.1.113883.6.177" });
+            context.ConceptMaps.Add(new ConceptMap() { Code = "en", ParentId = 1, ParentType = "Topic", CreatedOn = DateTime.Now, CodeSystem = "2.16.840.1.113883.6.121" });
+            context.ConceptMaps.Add(new ConceptMap() { Code = "es", ParentId = 5, ParentType = "Topic", CreatedOn = DateTime.Now, CodeSystem = "2.16.840.1.113883.6.121" });
+            context.ConceptMaps.Add(new ConceptMap() { Code = "163W00000X", ParentId = 1, ParentType = "Topic", CreatedOn = DateTime.Now, CodeSystem = "2.16.840.1.113883.6.101" });
+            context.ConceptMaps.Add(new ConceptMap() { Code = "200000000X", ParentId = 2, ParentType = "Topic", CreatedOn = DateTime.Now, CodeSystem = "2.16.840.1.113883.6.101" });
+            context.ConceptMaps.Add(new ConceptMap() { Code = "AMB", ParentId = 3, ParentType = "Topic", CreatedOn = DateTime.Now, CodeSystem = "2.16.840.1.113883.5.4" });
+            context.ConceptMaps.Add(new ConceptMap() { Code = "EMER", ParentId = 4, ParentType = "Topic", CreatedOn = DateTime.Now, CodeSystem = "2.16.840.1.113883.5.4" });
 
             context.SaveChanges();
         }
