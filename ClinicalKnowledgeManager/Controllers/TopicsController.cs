@@ -1,14 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Data;
-using System.Data.Entity;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
-using ClinicalKnowledgeManager.Models;
 using ClinicalKnowledgeManager.DB;
-using ClinicalKnowledgeManager.ViewModels;
 using ClinicalKnowledgeManager.Helpers;
+using ClinicalKnowledgeManager.Models;
+using ClinicalKnowledgeManager.ViewModels;
 using CodeFirstStoredProcedures;
 using HL7InfobuttonAPI;
 
@@ -16,8 +13,8 @@ namespace ClinicalKnowledgeManager.Controllers
 {
     public class TopicsController : Controller
     {
-        private ModelContext Context = new ModelContext();
-        private ViewModelFactory Factory = null;
+        private readonly ModelContext Context = new ModelContext();
+        private readonly ViewModelFactory Factory;
 
         public TopicsController()
         {
@@ -43,7 +40,7 @@ namespace ClinicalKnowledgeManager.Controllers
         public ActionResult Search()
         {
             var mapper = BuildMapperFromQueryString();
-            var storedProc = new SearchForTopicsBasedOnContext()
+            var storedProc = new SearchForTopicsBasedOnContext
                 {
                     InformationRecipient = mapper.GetInformationRecipient(),
                     SearchCode = mapper.GetSearchCode(),
@@ -65,7 +62,8 @@ namespace ClinicalKnowledgeManager.Controllers
                 return Redirect(Url.Action("Details", new { id = result.First().Id }) + "?" + Request.QueryString);
             }
 
-            return View(new TopicSearchResult() {
+            return View(new TopicSearchResult
+                {
                 Topics = Factory.BuildTopicDetails(result.ToList()),
                 ContextQuery = storedProc
                 });
@@ -83,8 +81,8 @@ namespace ClinicalKnowledgeManager.Controllers
             }
 
             var mapper = BuildMapperFromQueryString();
-            var storedProc = new GetSubTopicsForContext()
-            {
+            var storedProc = new GetSubTopicsForContext
+                {
                 TopicID = id,
                 InformationRecipient = mapper.GetInformationRecipient(),
                 SearchCode = mapper.GetSearchCode(),
@@ -102,7 +100,7 @@ namespace ClinicalKnowledgeManager.Controllers
             };
             var result = Context.Database.ExecuteStoredProcedure(storedProc).ToList();
 
-            var details = new TopicDetail()
+            var details = new TopicDetail
                 {
                     Topic = topic,
                     SubTopics = Factory.BuildSubTopicsForTopic(topic).ToList(),

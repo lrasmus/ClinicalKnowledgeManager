@@ -25,12 +25,20 @@ td.tableOfContents {
 }
 
 .subTopicContainer {
-    padding: 0px;
+    padding: 0;
     padding-left: 10px;
     margin: 0;
-    display: none;
 }
 
 .contextItem  {
     display: block;
+}
+
+.nonContextItem {
+    display: none;
+}
+
+.accordion a {
+    color: inherit;
+    text-decoration: none;
 }

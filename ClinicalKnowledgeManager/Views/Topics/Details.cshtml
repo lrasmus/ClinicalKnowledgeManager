@@ -5,7 +5,6 @@
     ViewBag.Title = Model.Topic.Name;
 }
 
-
 <h1>@Html.DisplayFor(model => model.Topic.Name)</h1>
 
 <table>
@@ -14,9 +13,11 @@
             @Html.Partial("TableOfContents")
         </td>
         <td>
-            @foreach (var item in Model.SubTopics) {
-                @Html.Partial("~/Views/SubTopics/Details.cshtml", item)
-            }
+            <div class="accordion">
+                @foreach (var item in Model.SubTopics) {
+                    @Html.Partial("~/Views/SubTopics/Details.cshtml", item)
+                }
+            </div>
         </td>
     </tr>
 </table>
