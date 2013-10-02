@@ -5,7 +5,7 @@
     @Html.ActionLink("View full topic", "Details", "Topics", new { id = Model.SubTopic.ParentId }, null)
 }*@
 
-<div class="subTopicContainer @(Model.IsContextItem ? "contextItem" : "")">
+<div class="subTopicContainer @(Model.IsContextItem ? "contextItem" : "")" id="subTopic-@Model.SubTopic.Id">
     <div class="subTopicName @(Model.IsContextItem ? "contextItem" : "")" data-subtopic-id="@Model.SubTopic.Id">
         @Html.Raw(string.Format("<h{1}>{0}</h{1}>", Html.DisplayFor(modelItem => Model.SubTopic.Name), Model.Level))
     </div>

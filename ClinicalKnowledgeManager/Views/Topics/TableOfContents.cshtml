@@ -2,15 +2,15 @@
 @model ClinicalKnowledgeManager.ViewModels.TopicDetail
 
 <ul>
-    @DisplayTopic(Model.SubTopics, Model.Topic.Name)
+    @DisplayTopic(Model.SubTopics, Model.Topic.Name, string.Format("topic-{0}", Model.Topic.Id))
 </ul>
 
-@helper DisplayTopic(IEnumerable<SubTopicDetail> subTopics, string topicName) {
-    <li>@Html.ActionLink(topicName, "")</li>
+@helper DisplayTopic(IEnumerable<SubTopicDetail> subTopics, string topicName, string htmlId) {
+    <li><a href="#@htmlId">@topicName</a></li>
     if (subTopics != null) { 
         <ul>
         @foreach (var subTopic in subTopics) {
-            @DisplayTopic(subTopic.SubTopics, subTopic.SubTopic.Name)
+            @DisplayTopic(subTopic.SubTopics, subTopic.SubTopic.Name, string.Format("subTopic-{0}", subTopic.SubTopic.Id))
         }
         </ul>
     }
