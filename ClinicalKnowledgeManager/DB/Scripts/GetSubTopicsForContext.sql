@@ -1,11 +1,14 @@
-
 -- =============================================
 -- Author:		Luke Rasmussen
 -- Create date: February 2013
 -- Description:	Used after identifying relevant topics.  This will return the specific
 --		sub-topics that match the context parameters.
+--
+-- Updates:
+------------------------------------------------
+-- 10/6/13 - Return all sub-topics if no matching context found
 -- =============================================
-CREATE PROCEDURE spGetSubTopicsForContext
+ALTER PROCEDURE [dbo].[spGetSubTopicsForContext]
     @topic_id INT,
 	@info_recipient NVARCHAR(255),
 	@search_code NVARCHAR(255),
@@ -134,6 +137,43 @@ BEGIN
     )
     AS MatchingSubTopics;
     
-    SELECT s.* FROM @MatchingSubTopics m
-        INNER JOIN dbo.SubTopics s ON s.Id = m.Id
+    IF (SELECT COUNT(*) FROM @MatchingSubTopics) = 0
+        BEGIN
+            WITH TopicSubtopics(Id, [Name], [ParentId], [ParentType], [CreatedOn])
+            AS
+            (
+                SELECT s.Id, s.[Name], s.[ParentId], s.[ParentType], s.[CreatedOn]
+                FROM dbo.SubTopics s
+                    INNER JOIN dbo.Topics t ON t.id = s.ParentId AND s.ParentType = 'Topic'
+                WHERE t.id = @topic_id
+
+                UNION ALL
+            	
+                SELECT s.Id, s.[Name], s.[ParentId], s.[ParentType], s.[CreatedOn]
+                FROM dbo.SubTopics s
+                    INNER JOIN TopicSubtopics t ON t.Id = s.ParentId AND (s.ParentType = 'SubTopic')
+            )
+
+            SELECT * FROM TopicSubtopics
+        END
+    ELSE
+        BEGIN
+            WITH TopicSubtopics(Id, [Name], [ParentId], [ParentType], [CreatedOn])
+            AS
+            (
+                SELECT s.Id, s.[Name], s.[ParentId], s.[ParentType], s.[CreatedOn]
+                FROM dbo.SubTopics s
+                    INNER JOIN @MatchingSubTopics m ON m.id = s.ParentId AND s.ParentType = 'SubTopic'
+
+                UNION ALL
+            	
+                SELECT s.Id, s.[Name], s.[ParentId], s.[ParentType], s.[CreatedOn]
+                FROM dbo.SubTopics s
+                    INNER JOIN TopicSubtopics t ON t.Id = s.ParentId AND (s.ParentType = 'SubTopic')
+            )
+            SELECT * FROM TopicSubtopics
+            UNION ALL
+            SELECT s.* FROM @MatchingSubTopics m
+                INNER JOIN dbo.SubTopics s ON s.Id = m.Id
+        END
 END
