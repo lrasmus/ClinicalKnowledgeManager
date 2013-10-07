@@ -6,7 +6,7 @@
 }
 
 <h2>Search</h2>
-@if (Model.ContextQuery != null) {
+@*@if (Model.ContextQuery != null) {
     @Html.Partial("FilterDescription", new ContextFilter(Model.ContextQuery));
-}
+}*@
 @Html.Partial("TopicList", Model.Topics)

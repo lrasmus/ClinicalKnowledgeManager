@@ -1,11 +1,21 @@
 ﻿@model IEnumerable<ClinicalKnowledgeManager.ViewModels.TopicDetail>
 
 <div class="index">
-    @foreach (var item in Model) {
+    @if (Model == null || Model.Count() == 0) {
         <div class="topic">
-            @Html.ActionLink(
-            string.Format("{0}   ({1})", item.Topic.Name, item.Topic.Audience), 
-            "Details", new { id = item.Topic.Id })
+            No topics were found that matched your search criteria.
         </div>
+        <div class="topic">
+            @Html.ActionLink("Browse all topics", "Index")
+        </div>
+    } else {
+        <div>The following results were found:</div>
+        foreach (var item in Model) {
+            <div class="topic">
+                @Html.ActionLink(
+                    string.Format("{0}   ({1})", item.Topic.Name, item.Topic.Audience), 
+                    "Details", new { id = item.Topic.Id })
+            </div>
+        }
     }
 </div>
