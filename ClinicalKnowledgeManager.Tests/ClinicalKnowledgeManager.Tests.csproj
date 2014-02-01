@@ -103,6 +103,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controllers\TopicsApiControllerTests.cs" />
     <Compile Include="Controllers\TopicsControllerTests.cs" />
     <Compile Include="DB\GetSubTopicsForContextTests.cs" />
     <Compile Include="TestBase.cs" />
