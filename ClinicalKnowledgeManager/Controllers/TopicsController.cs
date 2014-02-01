@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web.Mvc;
 using ClinicalKnowledgeManager.DB;
 using ClinicalKnowledgeManager.Helpers;
+using ClinicalKnowledgeManager.Lib;
 using ClinicalKnowledgeManager.Models;
 using ClinicalKnowledgeManager.ViewModels;
 using CodeFirstStoredProcedures;
@@ -39,24 +40,28 @@ namespace ClinicalKnowledgeManager.Controllers
         // GET: /Topics/Search
         public ActionResult Search()
         {
-            var mapper = BuildMapperFromQueryString();
-            var storedProc = new SearchForTopicsBasedOnContext
-                {
-                    InformationRecipient = mapper.GetInformationRecipient(),
-                    SearchCode = mapper.GetSearchCode(),
-                    SearchCodeSystem = mapper.GetSearchCodeSystem(),
-                    Task = mapper.GetTaskCode(),
-                    SubTopicCode = mapper.GetSubTopicCode(),
-                    SubTopicCodeSystem = mapper.GetSubTopicCodeSystem(),
-                    Gender = mapper.GetGender(),
-                    AgeGroup = mapper.GetAge(),
-                    PerformerLanguage = mapper.GetPerformerLanguage(),
-                    RecipientLanguage = mapper.GetRecipientLanguage(),
-                    PerformerProviderCode = mapper.GetPerformerProviderCode(),
-                    RecipientProviderCode = mapper.GetRecipientProviderCode(),
-                    EncounterCode = mapper.GetEncounterCode()
-                };
-            var result = Context.Database.ExecuteStoredProcedure(storedProc).ToList();
+            //var mapper = BuildMapperFromQueryString();
+            //var storedProc = new SearchForTopicsBasedOnContext
+            //    {
+            //        InformationRecipient = mapper.GetInformationRecipient(),
+            //        SearchCode = mapper.GetSearchCode(),
+            //        SearchCodeSystem = mapper.GetSearchCodeSystem(),
+            //        Task = mapper.GetTaskCode(),
+            //        SubTopicCode = mapper.GetSubTopicCode(),
+            //        SubTopicCodeSystem = mapper.GetSubTopicCodeSystem(),
+            //        Gender = mapper.GetGender(),
+            //        AgeGroup = mapper.GetAge(),
+            //        PerformerLanguage = mapper.GetPerformerLanguage(),
+            //        RecipientLanguage = mapper.GetRecipientLanguage(),
+            //        PerformerProviderCode = mapper.GetPerformerProviderCode(),
+            //        RecipientProviderCode = mapper.GetRecipientProviderCode(),
+            //        EncounterCode = mapper.GetEncounterCode()
+            //    };
+            //var result = Context.Database.ExecuteStoredProcedure(storedProc).ToList();
+
+            var search = new TopicRequestSearch(Context);
+            var result = search.SearchTopics(Request.QueryString);
+
             if (result.Count == 1)
             {
                 return Redirect(Url.Action("Details", new { id = result.First().Id }) + "?" + Request.QueryString);
@@ -65,7 +70,7 @@ namespace ClinicalKnowledgeManager.Controllers
             return View(new TopicSearchResult
                 {
                 Topics = Factory.BuildTopicDetails(result.ToList()),
-                ContextQuery = storedProc
+                ContextQuery = search.StoredProcedure
                 });
         }
 
@@ -80,32 +85,35 @@ namespace ClinicalKnowledgeManager.Controllers
                 return HttpNotFound();
             }
 
-            var mapper = BuildMapperFromQueryString();
-            var storedProc = new GetSubTopicsForContext
-                {
-                TopicID = id,
-                InformationRecipient = mapper.GetInformationRecipient(),
-                SearchCode = mapper.GetSearchCode(),
-                SearchCodeSystem = mapper.GetSearchCodeSystem(),
-                Task = mapper.GetTaskCode(),
-                SubTopicCode = mapper.GetSubTopicCode(),
-                SubTopicCodeSystem = mapper.GetSubTopicCodeSystem(),
-                Gender = mapper.GetGender(),
-                AgeGroup = mapper.GetAge(),
-                PerformerLanguage = mapper.GetPerformerLanguage(),
-                RecipientLanguage = mapper.GetRecipientLanguage(),
-                PerformerProviderCode = mapper.GetPerformerProviderCode(),
-                RecipientProviderCode = mapper.GetRecipientProviderCode(),
-                EncounterCode = mapper.GetEncounterCode()
-            };
-            var result = Context.Database.ExecuteStoredProcedure(storedProc).ToList();
+            //var mapper = BuildMapperFromQueryString();
+            //var storedProc = new GetSubTopicsForContext
+            //    {
+            //    TopicID = id,
+            //    InformationRecipient = mapper.GetInformationRecipient(),
+            //    SearchCode = mapper.GetSearchCode(),
+            //    SearchCodeSystem = mapper.GetSearchCodeSystem(),
+            //    Task = mapper.GetTaskCode(),
+            //    SubTopicCode = mapper.GetSubTopicCode(),
+            //    SubTopicCodeSystem = mapper.GetSubTopicCodeSystem(),
+            //    Gender = mapper.GetGender(),
+            //    AgeGroup = mapper.GetAge(),
+            //    PerformerLanguage = mapper.GetPerformerLanguage(),
+            //    RecipientLanguage = mapper.GetRecipientLanguage(),
+            //    PerformerProviderCode = mapper.GetPerformerProviderCode(),
+            //    RecipientProviderCode = mapper.GetRecipientProviderCode(),
+            //    EncounterCode = mapper.GetEncounterCode()
+            //};
+            //var result = Context.Database.ExecuteStoredProcedure(storedProc).ToList();
+
+            var search = new TopicRequestSearch(Context);
+            var result = search.SearchSubTopicsForTopic(id, Request.QueryString);
 
             var details = new TopicDetail
                 {
                     Topic = topic,
                     SubTopics = Factory.BuildSubTopicsForTopic(topic).ToList(),
                     ContextSubTopics = result,
-                    ContextQuery = storedProc
+                    ContextQuery = search.StoredProcedure
                 };
 
             foreach (var subTopic in details.SubTopics)
@@ -197,14 +205,6 @@ namespace ClinicalKnowledgeManager.Controllers
         {
             Context.Dispose();
             base.Dispose(disposing);
-        }
-
-        private QueryMapper BuildMapperFromQueryString()
-        {
-            var parser = new Parser();
-            var request = parser.ParseRequest(Request.QueryString);
-            var mapper = new QueryMapper(request);
-            return mapper;
         }
 
         /// <summary>

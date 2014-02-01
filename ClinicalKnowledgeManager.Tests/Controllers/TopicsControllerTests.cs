@@ -62,10 +62,11 @@ namespace ClinicalKnowledgeManager.Tests.Controllers
             Assert.IsNotNull(model);
             Assert.AreEqual(1, model.ContextSubTopics.Count());
 
+            // If there are no matching sub-topics (which there won't be in this case), we want to get all sub-topics back.
             SetControllerContext(controller, "informationRecipient=NOTHING");
             result = controller.Details(1) as ViewResult;
             model = result.Model as TopicDetail;
-            Assert.AreEqual(0, model.ContextSubTopics.Count());
+            Assert.AreEqual(6, model.ContextSubTopics.Count());
         }
 
         [TestMethod]

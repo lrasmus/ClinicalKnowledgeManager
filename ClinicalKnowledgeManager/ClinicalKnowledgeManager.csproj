@@ -122,6 +122,7 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Controllers\TopicsApiController.cs" />
     <Compile Include="Controllers\SubTopicsController.cs" />
     <Compile Include="Controllers\TopicsController.cs" />
     <Compile Include="DB\GetSubTopicsForContext.cs" />
@@ -129,6 +130,7 @@
     <Compile Include="DB\SearchForTopicsBasedOnContext.cs" />
     <Compile Include="Helpers\QueryMapper.cs" />
     <Compile Include="Helpers\ViewModelFactory.cs" />
+    <Compile Include="Lib\TopicRequestSearch.cs" />
     <Compile Include="Migrations\201302122206453_InitialCreate.cs" />
     <Compile Include="Migrations\201302122206453_InitialCreate.Designer.cs">
       <DependentUpon>201302122206453_InitialCreate.cs</DependentUpon>

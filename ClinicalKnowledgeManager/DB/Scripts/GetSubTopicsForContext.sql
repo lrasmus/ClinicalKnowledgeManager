@@ -8,7 +8,7 @@
 ------------------------------------------------
 -- 10/6/13 - Return all sub-topics if no matching context found
 -- =============================================
-ALTER PROCEDURE [dbo].[spGetSubTopicsForContext]
+CREATE PROCEDURE [dbo].[spGetSubTopicsForContext]
     @topic_id INT,
 	@info_recipient NVARCHAR(255),
 	@search_code NVARCHAR(255),
