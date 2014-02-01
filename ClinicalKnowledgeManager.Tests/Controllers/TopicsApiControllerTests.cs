@@ -22,18 +22,19 @@ namespace ClinicalKnowledgeManager.Tests.Controllers
         protected const string ContextName = "CKMDB.Test";
 
         [TestMethod]
-        public void FindFirstMatchingTopic_NoResults()
+        public void FindFirstMatchingTopic_Results()
         {
             var controller = new TopicsApiController(ContextName);
-            SetControllerContext(controller, "mainSearchCriteria.v.cs=2.16.840.1.113883.6.96&mainSearchCriteria.v.c=424500005&informationRecipient=PROV");
+            SetControllerContext(controller, "mainSearchCriteria.v.cs=2.16.840.1.113883.6.177&mainSearchCriteria.v.c=Q000628&informationRecipient=PROV");
             var response = controller.FindFirstMatchingTopic();
             Assert.IsTrue(response.IsSuccessStatusCode);
             var topic = response.Content.ReadAsAsync<TopicSearchResult>();
             Assert.AreEqual(1, topic.Result.Topics.Count());
+            Assert.AreEqual(1, topic.Result.Topics.First().SubTopics.Count());
         }
 
         [TestMethod]
-        public void FindFirstMatchingTopic_Result()
+        public void FindFirstMatchingTopic_NoResults()
         {
             var controller = new TopicsApiController(ContextName);
             SetControllerContext(controller, "mainSearchCriteria.v.cs=2.16.840.1.113883.6.100&mainSearchCriteria.v.c=900");
@@ -44,18 +45,10 @@ namespace ClinicalKnowledgeManager.Tests.Controllers
 
         private void SetControllerContext(ApiController controller, string queryString)
         {
-            HttpRequestMessage message = new HttpRequestMessage();
+            var message = new HttpRequestMessage();
             message.RequestUri = new Uri("http://test/api/TopicsApi/FindFirstMatchingTopic?" + queryString);
             message.Properties.Add(HttpPropertyKeys.HttpConfigurationKey, new HttpConfiguration());
             controller.Request = message;
-//            controller.Request = new HttpRequestMessage();
-            //Mock<HttpRequestBase> request = new Mock<HttpRequestBase>();
-            //var testQueryString = HttpUtility.ParseQueryString(queryString);
-            //request.ExpectGet(req => req.QueryString).Returns(testQueryString);
-            //Mock<HttpContextBase> context = new Mock<HttpContextBase>();
-            //context.Expect(ctx => ctx.Request).Returns(request.Object);
-            //controller.ControllerContext = new ControllerContext(context.Object, new RouteData(), controller);
-            //controller.Url = new UrlHelper(new RequestContext(context.Object, new RouteData()));
         }
     }
 }
