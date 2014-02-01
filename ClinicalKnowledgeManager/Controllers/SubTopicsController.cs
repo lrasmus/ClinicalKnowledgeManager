@@ -40,7 +40,7 @@ namespace ClinicalKnowledgeManager.Controllers
                 return HttpNotFound();
             }
 
-            SubTopicDetail detail = Factory.BuildSubTopicDetail(subtopic, 1);
+            SubTopicDetail detail = Factory.BuildSubTopicDetail(subtopic, null, 1);
             detail.IsOnlyItemDisplayed = true;
             return View(detail);
         }

@@ -40,10 +40,12 @@ namespace ClinicalKnowledgeManager.Controllers
                 return Request.CreateResponse(HttpStatusCode.NotFound);
             }
 
+            var topic = result.FirstOrDefault();
+            var relevantSubTopics = search.SearchSubTopicsForTopic(topic.Id, Request.GetQueryNameValuePairs());
             return Request.CreateResponse(HttpStatusCode.OK, 
                 new TopicSearchResult
                 {
-                    Topics = Factory.BuildTopicDetails(new List<Topic>() { result.First() })
+                    Topics = new List<TopicDetail>() { Factory.BuildTopicDetails(topic, relevantSubTopics) }
                 });
         }
     }

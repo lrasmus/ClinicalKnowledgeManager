@@ -17,9 +17,13 @@ namespace ClinicalKnowledgeManager.Helpers
             Context = context;
         }
 
-        public IEnumerable<SubTopicDetail> BuildSubTopicsForTopic(Topic topic)
+        public IEnumerable<SubTopicDetail> BuildSubTopicsForTopic(Topic topic, List<SubTopic> relevantSubTopics)
         {
             IEnumerable<SubTopic> subTopics = Context.SubTopics.Where(x => x.ParentType == "Topic" && x.ParentId == topic.Id).ToList();
+            if (relevantSubTopics != null && relevantSubTopics.Count > 0)
+            {
+                subTopics = subTopics.Where(x => relevantSubTopics.FirstOrDefault(y => y.Id == x.Id) != null);
+            }
             IEnumerable<SubTopicDetail> subTopicDetails = subTopics.Select(x => new SubTopicDetail()
             {
                 Level = 2,
@@ -28,15 +32,19 @@ namespace ClinicalKnowledgeManager.Helpers
             }).ToList();
             foreach (var child in subTopicDetails)
             {
-                RecursivelyBuildSubTopicsForSubTopics(child, 3);
+                RecursivelyBuildSubTopicsForSubTopics(child, 3, relevantSubTopics);
             }
 
             return subTopicDetails;
         }
 
-        private void RecursivelyBuildSubTopicsForSubTopics(SubTopicDetail subTopic, int level)
+        private void RecursivelyBuildSubTopicsForSubTopics(SubTopicDetail subTopic, int level, List<SubTopic> relevantSubTopics)
         {
             IEnumerable<SubTopic> subTopics = Context.SubTopics.Where(x => x.ParentType == "SubTopic" && x.ParentId == subTopic.SubTopic.Id).ToList();
+            if (relevantSubTopics != null && relevantSubTopics.Count > 0)
+            {
+                subTopics = subTopics.Where(x => relevantSubTopics.FirstOrDefault(y => y.Id == x.Id) != null);
+            }
             subTopic.SubTopics = subTopics.Select(x => new SubTopicDetail()
             {
                 Level = level,
@@ -46,11 +54,11 @@ namespace ClinicalKnowledgeManager.Helpers
 
             foreach (var child in subTopic.SubTopics)
             {
-                RecursivelyBuildSubTopicsForSubTopics(child, level + 1);
+                RecursivelyBuildSubTopicsForSubTopics(child, level + 1, relevantSubTopics);
             }
         }
 
-        public SubTopicDetail BuildSubTopicDetail(SubTopic subTopic, int level = 1)
+        public SubTopicDetail BuildSubTopicDetail(SubTopic subTopic, List<SubTopic> relevantSubTopics, int level = 1)
         {
             SubTopicDetail subTopicDetail = new SubTopicDetail()
                 {
@@ -60,6 +68,10 @@ namespace ClinicalKnowledgeManager.Helpers
                 };
 
             IEnumerable<SubTopic> subTopics = Context.SubTopics.Where(x => x.ParentType == "SubTopic" && x.ParentId == subTopic.Id).ToList();
+            if (relevantSubTopics != null && relevantSubTopics.Count > 0)
+            {
+                subTopics = subTopics.Where(x => relevantSubTopics.FirstOrDefault(y => y.Id == x.Id) != null);
+            }
             subTopicDetail.SubTopics = subTopics.Select(x => new SubTopicDetail()
             {
                 Level = level,
@@ -69,7 +81,7 @@ namespace ClinicalKnowledgeManager.Helpers
 
             foreach (var child in subTopicDetail.SubTopics)
             {
-                RecursivelyBuildSubTopicsForSubTopics(child, level + 1);
+                RecursivelyBuildSubTopicsForSubTopics(child, level + 1, relevantSubTopics);
             }
 
             return subTopicDetail;
@@ -80,8 +92,17 @@ namespace ClinicalKnowledgeManager.Helpers
             return list.Select(x => new TopicDetail()
                 {
                     Topic = x,
-                    SubTopics = BuildSubTopicsForTopic(x).ToList()
+                    SubTopics = BuildSubTopicsForTopic(x, null).ToList()
                 });
+        }
+
+        public TopicDetail BuildTopicDetails(Topic topic, List<SubTopic> relevantSubTopics)
+        {
+            return new TopicDetail()
+            {
+                Topic = topic,
+                SubTopics = BuildSubTopicsForTopic(topic, relevantSubTopics).ToList()
+            };
         }
     }
 }

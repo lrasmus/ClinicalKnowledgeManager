@@ -54,6 +54,17 @@ namespace ClinicalKnowledgeManager.Lib
             return result;
         }
 
+        public List<Models.SubTopic> SearchSubTopicsForTopic(int topicId, IEnumerable<KeyValuePair<string, string>> queryString)
+        {
+            NameValueCollection collection = new NameValueCollection();
+            foreach (var item in queryString)
+            {
+                collection.Add(item.Key, item.Value);
+            }
+
+            return SearchSubTopicsForTopic(topicId, collection);
+        }
+
         public List<Models.SubTopic> SearchSubTopicsForTopic(int topicId, NameValueCollection queryString)
         {
             var mapper = BuildMapperFromQueryString(queryString);

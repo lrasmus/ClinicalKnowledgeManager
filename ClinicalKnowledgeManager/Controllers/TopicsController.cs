@@ -40,25 +40,6 @@ namespace ClinicalKnowledgeManager.Controllers
         // GET: /Topics/Search
         public ActionResult Search()
         {
-            //var mapper = BuildMapperFromQueryString();
-            //var storedProc = new SearchForTopicsBasedOnContext
-            //    {
-            //        InformationRecipient = mapper.GetInformationRecipient(),
-            //        SearchCode = mapper.GetSearchCode(),
-            //        SearchCodeSystem = mapper.GetSearchCodeSystem(),
-            //        Task = mapper.GetTaskCode(),
-            //        SubTopicCode = mapper.GetSubTopicCode(),
-            //        SubTopicCodeSystem = mapper.GetSubTopicCodeSystem(),
-            //        Gender = mapper.GetGender(),
-            //        AgeGroup = mapper.GetAge(),
-            //        PerformerLanguage = mapper.GetPerformerLanguage(),
-            //        RecipientLanguage = mapper.GetRecipientLanguage(),
-            //        PerformerProviderCode = mapper.GetPerformerProviderCode(),
-            //        RecipientProviderCode = mapper.GetRecipientProviderCode(),
-            //        EncounterCode = mapper.GetEncounterCode()
-            //    };
-            //var result = Context.Database.ExecuteStoredProcedure(storedProc).ToList();
-
             var search = new TopicRequestSearch(Context);
             var result = search.SearchTopics(Request.QueryString);
 
@@ -85,33 +66,13 @@ namespace ClinicalKnowledgeManager.Controllers
                 return HttpNotFound();
             }
 
-            //var mapper = BuildMapperFromQueryString();
-            //var storedProc = new GetSubTopicsForContext
-            //    {
-            //    TopicID = id,
-            //    InformationRecipient = mapper.GetInformationRecipient(),
-            //    SearchCode = mapper.GetSearchCode(),
-            //    SearchCodeSystem = mapper.GetSearchCodeSystem(),
-            //    Task = mapper.GetTaskCode(),
-            //    SubTopicCode = mapper.GetSubTopicCode(),
-            //    SubTopicCodeSystem = mapper.GetSubTopicCodeSystem(),
-            //    Gender = mapper.GetGender(),
-            //    AgeGroup = mapper.GetAge(),
-            //    PerformerLanguage = mapper.GetPerformerLanguage(),
-            //    RecipientLanguage = mapper.GetRecipientLanguage(),
-            //    PerformerProviderCode = mapper.GetPerformerProviderCode(),
-            //    RecipientProviderCode = mapper.GetRecipientProviderCode(),
-            //    EncounterCode = mapper.GetEncounterCode()
-            //};
-            //var result = Context.Database.ExecuteStoredProcedure(storedProc).ToList();
-
             var search = new TopicRequestSearch(Context);
             var result = search.SearchSubTopicsForTopic(id, Request.QueryString);
 
             var details = new TopicDetail
                 {
                     Topic = topic,
-                    SubTopics = Factory.BuildSubTopicsForTopic(topic).ToList(),
+                    SubTopics = Factory.BuildSubTopicsForTopic(topic, null).ToList(),
                     ContextSubTopics = result,
                     ContextQuery = search.StoredProcedure
                 };
