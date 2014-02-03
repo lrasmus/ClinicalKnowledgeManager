@@ -16,5 +16,7 @@ namespace ClinicalKnowledgeManager.Models
         public int ParentId { get; set; }
         [MaxLength(50)]
         public string ParentType { get; set; }
+        [MaxLength(255)]
+        public string Term { get; set; }
     }
 }

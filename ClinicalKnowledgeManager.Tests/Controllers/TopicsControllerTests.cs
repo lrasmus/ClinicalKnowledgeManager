@@ -37,6 +37,15 @@ namespace ClinicalKnowledgeManager.Tests.Controllers
             var result = controller.Search() as RedirectResult;
             Assert.IsNotNull(result);
         }
+        
+        [TestMethod]
+        public void Search_ByTerm_ReturnSingle()
+        {
+            var controller = new TopicsController(ContextName);
+            SetControllerContext(controller, "mainSearchCriteria.v.dn=clopidogrel%20metabolism");
+            var result = controller.Search() as RedirectResult;
+            Assert.IsNotNull(result);
+        }
 
         [TestMethod]
         public void Search_ReturnMultiple()

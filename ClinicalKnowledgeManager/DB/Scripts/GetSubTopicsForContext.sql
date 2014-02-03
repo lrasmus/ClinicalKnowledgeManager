@@ -13,9 +13,11 @@ CREATE PROCEDURE [dbo].[spGetSubTopicsForContext]
 	@info_recipient NVARCHAR(255),
 	@search_code NVARCHAR(255),
 	@search_code_system NVARCHAR(255),
+	@search_term NVARCHAR(255),
 	@task NVARCHAR(255),
 	@sub_topic_code NVARCHAR(255),
 	@sub_topic_code_system NVARCHAR(255),
+	@sub_topic_term NVARCHAR(255),
 	@gender NVARCHAR(10),
 	@age_group NVARCHAR(255),
     @performer_language_code NVARCHAR(255),
@@ -32,8 +34,10 @@ BEGIN
     -- If there are no context values set, 
     IF (@info_recipient IS NULL OR @info_recipient = '')
     AND (@search_code IS NULL OR @search_code = '')
+	AND (@search_term IS NULL OR @search_term = '')
 	AND (@task IS NULL OR @task = '')
 	AND (@sub_topic_code IS NULL OR @sub_topic_code = '')
+	AND (@sub_topic_term IS NULL OR @sub_topic_term = '')
 	AND (@gender IS NULL OR @gender = '')
 	AND (@age_group IS NULL OR @age_group = '')
     BEGIN
@@ -58,9 +62,10 @@ BEGIN
         SELECT s.id, 'searchCode' AS [Context]
         FROM dbo.SubTopics s
             INNER JOIN dbo.ConceptMaps cmsc ON (cmsc.ParentType = 'SubTopic' AND cmsc.ParentId = s.Id)
-        WHERE         
-            (@search_code_system = '' AND cmsc.Code = @search_code) OR
-            (cmsc.Code = @search_code AND cmsc.CodeSystem = @search_code_system)
+        WHERE
+            ((@search_code_system = '' OR @search_code_system IS NULL) AND (@search_code != '' AND @search_code IS NOT NULL) AND cmsc.Code = @search_code) OR
+			((@search_code_system != '' AND @search_code_system IS NOT NULL) AND (@search_code != '' AND @search_code IS NOT NULL) AND (cmsc.Code = @search_code AND cmsc.CodeSystem = @search_code_system)) OR
+			(@search_term != '' AND @search_term IS NOT NULL AND cmsc.Term IS NOT NULL AND cmsc.Term = @search_term)
 
         UNION ALL
 
@@ -76,8 +81,9 @@ BEGIN
         FROM dbo.SubTopics s
             INNER JOIN dbo.ConceptMaps cmsc ON (cmsc.ParentType = 'SubTopic' AND cmsc.ParentId = s.Id)
         WHERE
-            (@sub_topic_code_system = '' AND cmsc.Code = @sub_topic_code) OR
-            (cmsc.Code = @sub_topic_code AND cmsc.CodeSystem = @sub_topic_code_system)
+            ((@sub_topic_code_system = '' OR @sub_topic_code_system IS NULL) AND (@sub_topic_code != '' AND @sub_topic_code IS NOT NULL) AND cmsc.Code = @sub_topic_code) OR
+			((@sub_topic_code_system != '' AND @sub_topic_code_system IS NOT NULL) AND (@sub_topic_code != '' AND @sub_topic_code IS NOT NULL) AND (cmsc.Code = @sub_topic_code AND cmsc.CodeSystem = @sub_topic_code_system)) OR
+			(@sub_topic_term != '' AND @sub_topic_term IS NOT NULL AND cmsc.Term IS NOT NULL AND cmsc.Term = @sub_topic_term)
 
         UNION ALL
 

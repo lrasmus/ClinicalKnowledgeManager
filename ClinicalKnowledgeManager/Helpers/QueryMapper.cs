@@ -50,6 +50,18 @@ namespace ClinicalKnowledgeManager.Helpers
             return Query.MainSearchCriteria.Value.CodeSystem;
         }
 
+        public string GetSearchTerm()
+        {
+            if (Query.MainSearchCriteria == null
+                || Query.MainSearchCriteria.Value == null
+                || string.IsNullOrWhiteSpace(Query.MainSearchCriteria.Value.DisplayName))
+            {
+                return string.Empty;
+            }
+
+            return Query.MainSearchCriteria.Value.DisplayName;
+        }
+
         public string GetTaskCode()
         {
             if (Query.TaskContext == null
@@ -84,6 +96,18 @@ namespace ClinicalKnowledgeManager.Helpers
             }
 
             return Query.SubTopic.Value.CodeSystem;
+        }
+
+        public string GetSubTopicTerm()
+        {
+            if (Query.SubTopic == null
+                || Query.SubTopic.Value == null
+                || string.IsNullOrWhiteSpace(Query.SubTopic.Value.DisplayName))
+            {
+                return string.Empty;
+            }
+
+            return Query.SubTopic.Value.DisplayName;
         }
 
         public string GetGender()
