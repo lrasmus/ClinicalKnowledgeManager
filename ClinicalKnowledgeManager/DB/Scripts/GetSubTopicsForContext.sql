@@ -143,6 +143,16 @@ BEGIN
     )
     AS MatchingSubTopics;
     
+    
+	DECLARE @max_matching INT
+    SELECT @max_matching = MAX(cnt) FROM
+    (
+        SELECT Id, COUNT(Id) AS cnt
+        FROM (SELECT DISTINCT * from @MatchingSubTopics) SubTopics
+        GROUP BY Id
+    ) sub  
+
+
     IF (SELECT COUNT(*) FROM @MatchingSubTopics) = 0
         BEGIN
             WITH TopicSubtopics(Id, [Name], [ParentId], [ParentType], [CreatedOn])
@@ -160,16 +170,24 @@ BEGIN
                     INNER JOIN TopicSubtopics t ON t.Id = s.ParentId AND (s.ParentType = 'SubTopic')
             )
 
-            SELECT * FROM TopicSubtopics
+            SELECT DISTINCT * FROM TopicSubtopics
         END
     ELSE
         BEGIN
+			
+			DECLARE @RelevantSubTopics TABLE (id INT)
+			INSERT INTO @RelevantSubTopics
+			SELECT Id
+			FROM @MatchingSubTopics
+			GROUP BY Id
+			HAVING COUNT(Id) = @max_matching;
+
             WITH TopicSubtopics(Id, [Name], [ParentId], [ParentType], [CreatedOn])
             AS
             (
                 SELECT s.Id, s.[Name], s.[ParentId], s.[ParentType], s.[CreatedOn]
                 FROM dbo.SubTopics s
-                    INNER JOIN @MatchingSubTopics m ON m.id = s.ParentId AND s.ParentType = 'SubTopic'
+                    INNER JOIN @RelevantSubTopics m ON m.id = s.ParentId AND s.ParentType = 'SubTopic'
 
                 UNION ALL
             	
@@ -179,7 +197,7 @@ BEGIN
             )
             SELECT * FROM TopicSubtopics
             UNION ALL
-            SELECT s.* FROM @MatchingSubTopics m
+            SELECT s.* FROM @RelevantSubTopics m
                 INNER JOIN dbo.SubTopics s ON s.Id = m.Id
         END
 END
