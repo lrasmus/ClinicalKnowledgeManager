@@ -40,6 +40,8 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Data.Entity" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
@@ -125,40 +127,20 @@
     <Compile Include="Controllers\TopicsApiController.cs" />
     <Compile Include="Controllers\SubTopicsController.cs" />
     <Compile Include="Controllers\TopicsController.cs" />
-    <Compile Include="DB\GetSubTopicsForContext.cs" />
-    <Compile Include="DB\IContextQuery.cs" />
-    <Compile Include="DB\SearchForTopicsBasedOnContext.cs" />
+    <Compile Include="DB\ContextParams.cs" />
+    <Compile Include="DB\Entities.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Entities.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="DB\BaseRepository.cs" />
+    <Compile Include="DB\TopicRepository.cs" />
     <Compile Include="Helpers\QueryMapper.cs" />
     <Compile Include="Helpers\ViewModelFactory.cs" />
-    <Compile Include="Lib\TopicRequestSearch.cs" />
-    <Compile Include="Migrations\201302122206453_InitialCreate.cs" />
-    <Compile Include="Migrations\201302122206453_InitialCreate.Designer.cs">
-      <DependentUpon>201302122206453_InitialCreate.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201302122210227_Updates.cs" />
-    <Compile Include="Migrations\201302122210227_Updates.Designer.cs">
-      <DependentUpon>201302122210227_Updates.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201302151604446_SetFeldLengths.cs" />
-    <Compile Include="Migrations\201302151604446_SetFeldLengths.Designer.cs">
-      <DependentUpon>201302151604446_SetFeldLengths.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201302151729392_RenameCodeSetToCodeSystem.cs" />
-    <Compile Include="Migrations\201302151729392_RenameCodeSetToCodeSystem.Designer.cs">
-      <DependentUpon>201302151729392_RenameCodeSetToCodeSystem.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\Configuration.cs" />
-    <Compile Include="Models\ConceptMap.cs" />
-    <Compile Include="Models\Content.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Models\BaseModel.cs" />
-    <Compile Include="Models\SubTopic.cs" />
-    <Compile Include="Models\Topic.cs" />
-    <Compile Include="DB\ModelContext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ViewModels\ContextFilter.cs" />
     <Compile Include="ViewModels\SubTopicDetail.cs" />
     <Compile Include="ViewModels\TopicDetail.cs" />
     <Compile Include="ViewModels\TopicSearchResult.cs" />
@@ -219,8 +201,13 @@
     <Content Include="Content\themes\base\minified\jquery.ui.slider.min.css" />
     <Content Include="Content\themes\base\minified\jquery.ui.tabs.min.css" />
     <Content Include="Content\themes\base\minified\jquery.ui.theme.min.css" />
+    <EntityDeploy Include="DB\Entities.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>Entities.Designer.cs</LastGenOutput>
+    </EntityDeploy>
     <EmbeddedResource Include="DB\Scripts\SearchForTopicsBasedOnContext.sql" />
     <EmbeddedResource Include="DB\Scripts\GetSubTopicsForContext.sql" />
+    <EmbeddedResource Include="DB\Scripts\Dev-Setup.sql" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
     <Content Include="Scripts\jquery.collapse.js" />
@@ -257,6 +244,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Lib\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
@@ -265,10 +253,6 @@
     <ProjectReference Include="..\..\HL7InfobuttonAPI\HL7InfobuttonAPI.csproj">
       <Project>{2B5C496E-D58A-456E-BF76-60644CF7E41B}</Project>
       <Name>HL7InfobuttonAPI</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\CodeFirstStoredProcedures\CodeFirstStoredProcedures\CodeFirstStoredProcedures.csproj">
-      <Project>{5FD31722-1512-430A-AD51-C05072267E3D}</Project>
-      <Name>CodeFirstStoredProcedures</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
@@ -295,23 +279,6 @@
     <Content Include="Views\Topics\TableOfContents.cshtml" />
     <Content Include="Views\Topics\Search.cshtml" />
     <Content Include="Views\Topics\TopicList.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Migrations\201302122206453_InitialCreate.resx">
-      <DependentUpon>201302122206453_InitialCreate.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201302122210227_Updates.resx">
-      <DependentUpon>201302122210227_Updates.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201302151604446_SetFeldLengths.resx">
-      <DependentUpon>201302151604446_SetFeldLengths.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201302151729392_RenameCodeSetToCodeSystem.resx">
-      <DependentUpon>201302151729392_RenameCodeSetToCodeSystem.cs</DependentUpon>
-    </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\Topics\FilterDescription.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

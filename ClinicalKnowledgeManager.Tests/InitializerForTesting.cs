@@ -4,8 +4,12 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
+using System.Configuration;
 using System.Data.Entity;
-using ClinicalKnowledgeManager.Models;
+using System.Data.SqlClient;
+using Microsoft.SqlServer.Management.Common;
+using Microsoft.SqlServer.Management.Smo;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace ClinicalKnowledgeManager.Tests
 {
@@ -17,58 +21,20 @@ namespace ClinicalKnowledgeManager.Tests
     using System.Reflection;
     using System.IO;
 
-    /// <summary>
-    /// TODO: Update summary.
-    /// </summary>
-    public class InitializerForTesting : DropCreateDatabaseIfModelChanges<ModelContext>
+    [TestClass]
+    public class InitializerForTesting
     {
-        protected override void Seed(ModelContext context)
+        [AssemblyInitialize]
+        public static void InitializeDatabase(TestContext context)
         {
-            base.Seed(context);
+            string sqlConnectionString = ConfigurationManager.ConnectionStrings["CKMDB.Test"].ConnectionString;
 
             Assembly thisAssembly = Assembly.Load("ClinicalKnowledgeManager");
-            string script = (new StreamReader(thisAssembly.GetManifestResourceStream("ClinicalKnowledgeManager.DB.Scripts.SearchForTopicsBasedOnContext.sql"))).ReadToEnd();
-            context.Database.ExecuteSqlCommand(script);
-            script = (new StreamReader(thisAssembly.GetManifestResourceStream("ClinicalKnowledgeManager.DB.Scripts.GetSubTopicsForContext.sql"))).ReadToEnd();
-            context.Database.ExecuteSqlCommand(script);
-
-            context.Topics.Add(new Topic() { Name = "Clopidogrel", Audience = "Physician", CreatedOn = DateTime.Now });
-            context.Topics.Add(new Topic() { Name = "Warfarin", Audience = "Physician", CreatedOn = DateTime.Now });
-            context.Topics.Add(new Topic() { Name = "Clopidogrel", Audience = "Patient", CreatedOn = DateTime.Now });
-            context.Topics.Add(new Topic() { Name = "Warfarin", Audience = "Patient", CreatedOn = DateTime.Now });
-            context.Topics.Add(new Topic() { Name = "Espanol Warfarin", Audience = "Patient", CreatedOn = DateTime.Now });
-
-            context.SubTopics.Add(new SubTopic() {Name = "Summary", ParentId = 1, ParentType = "Topic", CreatedOn = DateTime.Now});
-            context.SubTopics.Add(new SubTopic() {Name = "Management", ParentId = 1, ParentType = "Topic", CreatedOn = DateTime.Now});
-            context.SubTopics.Add(new SubTopic() {Name = "Poor Metabolizers", ParentId = 2, ParentType = "SubTopic", CreatedOn = DateTime.Now});
-            context.SubTopics.Add(new SubTopic() {Name = "Intermediate Metabolizers", ParentId = 2, ParentType = "SubTopic", CreatedOn = DateTime.Now});
-            context.SubTopics.Add(new SubTopic() {Name = "Normal Metabolizers", ParentId = 2, ParentType = "SubTopic", CreatedOn = DateTime.Now});
-            context.SubTopics.Add(new SubTopic() {Name = "Femal Treatment", ParentId = 2, ParentType = "SubTopic", CreatedOn = DateTime.Now});
-            context.SubTopics.Add(new SubTopic() {Name = "Middle Age", ParentId = 3, ParentType = "Topic", CreatedOn = DateTime.Now});
-
-            context.ConceptMaps.Add(new ConceptMap() { Code = "MLREV", ParentId = 1, ParentType = "Topic", CreatedOn = DateTime.Now, CodeSystem = "2.16.840.1.113883.5.4", Term = "" });
-            context.ConceptMaps.Add(new ConceptMap() { Code = "MLREV", ParentId = 2, ParentType = "Topic", CreatedOn = DateTime.Now, CodeSystem = "2.16.840.1.113883.5.4", Term = "" });
-            context.ConceptMaps.Add(new ConceptMap() { Code = "PROV", ParentId = 1, ParentType = "Topic", CreatedOn = DateTime.Now, CodeSystem = "informationRecipient", Term = "" });
-            context.ConceptMaps.Add(new ConceptMap() { Code = "PROV", ParentId = 2, ParentType = "Topic", CreatedOn = DateTime.Now, CodeSystem = "informationRecipient", Term = "" });
-            context.ConceptMaps.Add(new ConceptMap() { Code = "PAT", ParentId = 3, ParentType = "Topic", CreatedOn = DateTime.Now, CodeSystem = "informationRecipient", Term = "" });
-            context.ConceptMaps.Add(new ConceptMap() { Code = "PAT", ParentId = 4, ParentType = "Topic", CreatedOn = DateTime.Now, CodeSystem = "informationRecipient", Term = "" });
-            context.ConceptMaps.Add(new ConceptMap() { Code = "", ParentId = 3, ParentType = "SubTopic", CreatedOn = DateTime.Now, CodeSystem = "", Term = "clopidogrel metabolism" });
-            context.ConceptMaps.Add(new ConceptMap() { Code = "424500005", ParentId = 3, ParentType = "SubTopic", CreatedOn = DateTime.Now, CodeSystem = "2.16.840.1.113883.6.96", Term = "" });
-            context.ConceptMaps.Add(new ConceptMap() { Code = "424500005", ParentId = 3, ParentType = "Topic", CreatedOn = DateTime.Now, CodeSystem = "2.16.840.1.113883.6.96", Term = "" });
-            context.ConceptMaps.Add(new ConceptMap() { Code = "424500005", ParentId = 4, ParentType = "Topic", CreatedOn = DateTime.Now, CodeSystem = "2.16.840.1.113883.6.1", Term = "" });
-            context.ConceptMaps.Add(new ConceptMap() { Code = "Q000175", ParentId = 3, ParentType = "SubTopic", CreatedOn = DateTime.Now, CodeSystem = "2.16.840.1.113883.6.177", Term = "" });
-            context.ConceptMaps.Add(new ConceptMap() { Code = "Q000628", ParentId = 2, ParentType = "SubTopic", CreatedOn = DateTime.Now, CodeSystem = "2.16.840.1.113883.6.177", Term = "" });
-            context.ConceptMaps.Add(new ConceptMap() { Code = "Q000175", ParentId = 2, ParentType = "Topic", CreatedOn = DateTime.Now, CodeSystem = "2.16.840.1.113883.6.177", Term = "" });
-            context.ConceptMaps.Add(new ConceptMap() { Code = "F", ParentId = 6, ParentType = "SubTopic", CreatedOn = DateTime.Now, CodeSystem = "2.16.840.1.113883.5.1", Term = "" });
-            context.ConceptMaps.Add(new ConceptMap() { Code = "D008875", ParentId = 7, ParentType = "SubTopic", CreatedOn = DateTime.Now, CodeSystem = "2.16.840.1.113883.6.177", Term = "" });
-            context.ConceptMaps.Add(new ConceptMap() { Code = "en", ParentId = 1, ParentType = "Topic", CreatedOn = DateTime.Now, CodeSystem = "2.16.840.1.113883.6.121", Term = "" });
-            context.ConceptMaps.Add(new ConceptMap() { Code = "es", ParentId = 5, ParentType = "Topic", CreatedOn = DateTime.Now, CodeSystem = "2.16.840.1.113883.6.121", Term = "" });
-            context.ConceptMaps.Add(new ConceptMap() { Code = "163W00000X", ParentId = 1, ParentType = "Topic", CreatedOn = DateTime.Now, CodeSystem = "2.16.840.1.113883.6.101", Term = "" });
-            context.ConceptMaps.Add(new ConceptMap() { Code = "200000000X", ParentId = 2, ParentType = "Topic", CreatedOn = DateTime.Now, CodeSystem = "2.16.840.1.113883.6.101", Term = "" });
-            context.ConceptMaps.Add(new ConceptMap() { Code = "AMB", ParentId = 3, ParentType = "Topic", CreatedOn = DateTime.Now, CodeSystem = "2.16.840.1.113883.5.4", Term = "" });
-            context.ConceptMaps.Add(new ConceptMap() { Code = "EMER", ParentId = 4, ParentType = "Topic", CreatedOn = DateTime.Now, CodeSystem = "2.16.840.1.113883.5.4", Term = "" });
-
-            context.SaveChanges();
+            SqlConnection conn = new SqlConnection(sqlConnectionString);
+            Server server = new Server(new ServerConnection(conn));
+            string script = (new StreamReader(thisAssembly.GetManifestResourceStream("ClinicalKnowledgeManager.DB.Scripts.Dev-Setup.sql"))).ReadToEnd();
+            server.ConnectionContext.ExecuteNonQuery(script);
+            conn.Close();
         }
     }
 }

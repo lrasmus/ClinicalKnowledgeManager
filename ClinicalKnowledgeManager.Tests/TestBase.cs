@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Configuration;
 using System.Text;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,25 +12,25 @@ namespace ClinicalKnowledgeManager.Tests
     [TestClass]
     public class TestBase
     {
-        protected ModelContext DataContext;
+        protected TopicRepository DataContext;
 
         [TestInitialize]
         public void InitTest()
         {
-            if (Database.Exists("CKMDB.Test"))
-            {
-                Database.Delete("CKMDB.Test");
-            }
-            Database.SetInitializer(new InitializerForTesting());
+            //if (Database.Exists("CKMDB.Test"))
+            //{
+            //    Database.Delete("CKMDB.Test");
+            //}
+            //Database.SetInitializer(new InitializerForTesting());
 
-            DataContext = new ModelContext("CKMDB.Test");
-            DataContext.Database.Initialize(true);
+            DataContext = new TopicRepository(ConfigurationManager.ConnectionStrings["CKMDBEntities.Test"].ConnectionString);
+            //DataContext.Database.Initialize(true);
         }
 
         [TestCleanup]
         public void CleanupTest()
         {
-            DataContext.Dispose();
+            //DataContext.Dispose();
         }
     }
 }

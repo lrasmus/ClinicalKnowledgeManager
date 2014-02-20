@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Configuration;
 using System.Net.Http;
 using System.Text;
 using System.Collections.Generic;
@@ -18,8 +19,14 @@ namespace ClinicalKnowledgeManager.Tests.Controllers
     [TestClass]
     public class TopicsApiControllerTests : TestBase
     {
+        //protected const string ContextName = "CKMDBEntities.Test";
+        protected string ContextName = "";
 
-        protected const string ContextName = "CKMDB.Test";
+        [TestInitialize]
+        public void Initialize()
+        {
+            ContextName = ConfigurationManager.ConnectionStrings["CKMDBEntities.Test"].ConnectionString;
+        }
 
         [TestMethod]
         public void FindFirstMatchingTopic_Results()

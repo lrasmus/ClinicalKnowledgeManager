@@ -2,14 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
-using CodeFirstStoredProcedures;
-using ClinicalKnowledgeManager.Models;
 
 namespace ClinicalKnowledgeManager.DB
 {
-    public class SearchForTopicsBasedOnContext : IStoredProcedure<Topic>, IContextQuery
+    public class ContextParams
     {
-        public SearchForTopicsBasedOnContext()
+        public ContextParams()
         {
             InformationRecipient = string.Empty;
             SearchCode = string.Empty;

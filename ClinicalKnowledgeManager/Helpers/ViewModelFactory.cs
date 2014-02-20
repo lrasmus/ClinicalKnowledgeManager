@@ -3,23 +3,22 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using ClinicalKnowledgeManager.ViewModels;
-using ClinicalKnowledgeManager.Models;
 using ClinicalKnowledgeManager.DB;
 
 namespace ClinicalKnowledgeManager.Helpers
 {
     public class ViewModelFactory
     {
-        private ModelContext Context = null;
+        private TopicRepository Repository { get; set; }
 
-        public ViewModelFactory(ModelContext context)
+        public ViewModelFactory(TopicRepository repository)
         {
-            Context = context;
+            Repository = repository;
         }
 
         public IEnumerable<SubTopicDetail> BuildSubTopicsForTopic(Topic topic, List<SubTopic> relevantSubTopics)
         {
-            IEnumerable<SubTopic> subTopics = Context.SubTopics.Where(x => x.ParentType == "Topic" && x.ParentId == topic.Id).ToList();
+            IEnumerable<SubTopic> subTopics = Repository.GetSubTopicsForItem("Topic", topic.Id);
             if (relevantSubTopics != null && relevantSubTopics.Count > 0)
             {
                 subTopics = subTopics.Where(x => relevantSubTopics.FirstOrDefault(y => y.Id == x.Id) != null);
@@ -28,7 +27,7 @@ namespace ClinicalKnowledgeManager.Helpers
             {
                 Level = 2,
                 SubTopic = x,
-                Contents = Context.Contents.Where(c => c.ParentType == "SubTopic" && c.ParentId == x.Id).Select(c => c.Value).ToList()
+                Contents = Repository.GetContentsForItem("SubTopic", x.Id)
             }).ToList();
             foreach (var child in subTopicDetails)
             {
@@ -40,7 +39,7 @@ namespace ClinicalKnowledgeManager.Helpers
 
         private void RecursivelyBuildSubTopicsForSubTopics(SubTopicDetail subTopic, int level, List<SubTopic> relevantSubTopics)
         {
-            IEnumerable<SubTopic> subTopics = Context.SubTopics.Where(x => x.ParentType == "SubTopic" && x.ParentId == subTopic.SubTopic.Id).ToList();
+            IEnumerable<SubTopic> subTopics = Repository.GetSubTopicsForItem("SubTopic", subTopic.SubTopic.Id);
             if (relevantSubTopics != null && relevantSubTopics.Count > 0)
             {
                 subTopics = subTopics.Where(x => relevantSubTopics.FirstOrDefault(y => y.Id == x.Id) != null);
@@ -49,7 +48,7 @@ namespace ClinicalKnowledgeManager.Helpers
             {
                 Level = level,
                 SubTopic = x,
-                Contents = Context.Contents.Where(c => c.ParentType == "SubTopic" && c.ParentId == x.Id).Select(c => c.Value).ToList()
+                Contents = Repository.GetContentsForItem("SubTopic", x.Id)
             }).ToList();
 
             foreach (var child in subTopic.SubTopics)
@@ -64,10 +63,10 @@ namespace ClinicalKnowledgeManager.Helpers
                 {
                     Level = level,
                     SubTopic = subTopic,
-                    Contents = Context.Contents.Where(c => c.ParentType == "SubTopic" && c.ParentId == subTopic.Id).Select(c => c.Value).ToList()
+                    Contents = Repository.GetContentsForItem("SubTopic", subTopic.Id)
                 };
 
-            IEnumerable<SubTopic> subTopics = Context.SubTopics.Where(x => x.ParentType == "SubTopic" && x.ParentId == subTopic.Id).ToList();
+            IEnumerable<SubTopic> subTopics = Repository.GetSubTopicsForItem("SubTopic", subTopic.Id);
             if (relevantSubTopics != null && relevantSubTopics.Count > 0)
             {
                 subTopics = subTopics.Where(x => relevantSubTopics.FirstOrDefault(y => y.Id == x.Id) != null);
@@ -76,7 +75,7 @@ namespace ClinicalKnowledgeManager.Helpers
             {
                 Level = level,
                 SubTopic = x,
-                Contents = Context.Contents.Where(c => c.ParentType == "SubTopic" && c.ParentId == x.Id).Select(c => c.Value).ToList()
+                Contents = Repository.GetContentsForItem("SubTopic", x.Id)
             });
 
             foreach (var child in subTopicDetail.SubTopics)

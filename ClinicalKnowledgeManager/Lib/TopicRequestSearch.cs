@@ -5,24 +5,23 @@ using System.Linq;
 using System.Web;
 using ClinicalKnowledgeManager.DB;
 using ClinicalKnowledgeManager.Helpers;
-using CodeFirstStoredProcedures;
 using HL7InfobuttonAPI;
 
 namespace ClinicalKnowledgeManager.Lib
 {
     public class TopicRequestSearch
     {
-        private readonly ModelContext Context = null;
-        public IContextQuery StoredProcedure { get; set; }
+        public TopicRepository Repository { get; set; }
 
-        public TopicRequestSearch(ModelContext context)
+        public TopicRequestSearch(TopicRepository repository)
         {
-            Context = context;
+            TopicRepository = topicRepo;
+            SubTopicRepository = subTopicRepo;
         }
 
-        public List<Models.Topic> SearchTopics(IEnumerable<KeyValuePair<string, string>> queryString)
+        public List<Topic> SearchTopics(IEnumerable<KeyValuePair<string, string>> queryString)
         {
-            NameValueCollection collection = new NameValueCollection();
+            var collection = new NameValueCollection();
             foreach (var item in queryString)
             {
                 collection.Add(item.Key, item.Value);
@@ -31,32 +30,15 @@ namespace ClinicalKnowledgeManager.Lib
             return SearchTopics(collection);
         }
 
-        public List<Models.Topic> SearchTopics(NameValueCollection queryString)
+        public List<Topic> SearchTopics(NameValueCollection queryString)
         {
             var mapper = BuildMapperFromQueryString(queryString);
-            StoredProcedure = new SearchForTopicsBasedOnContext
-            {
-                InformationRecipient = mapper.GetInformationRecipient(),
-                SearchCode = mapper.GetSearchCode(),
-                SearchCodeSystem = mapper.GetSearchCodeSystem(),
-                SearchTerm = mapper.GetSearchTerm(),
-                Task = mapper.GetTaskCode(),
-                SubTopicCode = mapper.GetSubTopicCode(),
-                SubTopicCodeSystem = mapper.GetSubTopicCodeSystem(),
-                SubTopicTerm = mapper.GetSubTopicTerm(),
-                Gender = mapper.GetGender(),
-                AgeGroup = mapper.GetAge(),
-                PerformerLanguage = mapper.GetPerformerLanguage(),
-                RecipientLanguage = mapper.GetRecipientLanguage(),
-                PerformerProviderCode = mapper.GetPerformerProviderCode(),
-                RecipientProviderCode = mapper.GetRecipientProviderCode(),
-                EncounterCode = mapper.GetEncounterCode()
-            };
-            var result = Context.Database.ExecuteStoredProcedure(StoredProcedure as SearchForTopicsBasedOnContext).ToList();
-            return result;
+            return TopicRepository.SearchForTopicsBasedOnContext(mapper.GetInformationRecipient(), mapper.GetSearchCode(), mapper.GetSearchCodeSystem(), mapper.GetSearchTerm(),
+                mapper.GetTaskCode(), mapper.GetSubTopicCode(), mapper.GetSubTopicCodeSystem(), mapper.GetSubTopicTerm(), mapper.GetGender(), mapper.GetAge(),
+                mapper.GetPerformerLanguage(), mapper.GetRecipientLanguage(), mapper.GetPerformerProviderCode(), mapper.GetRecipientProviderCode(), mapper.GetEncounterCode());
         }
 
-        public List<Models.SubTopic> SearchSubTopicsForTopic(int topicId, IEnumerable<KeyValuePair<string, string>> queryString)
+        public List<SubTopic> SearchSubTopicsForTopic(int topicId, IEnumerable<KeyValuePair<string, string>> queryString)
         {
             NameValueCollection collection = new NameValueCollection();
             foreach (var item in queryString)
@@ -67,30 +49,12 @@ namespace ClinicalKnowledgeManager.Lib
             return SearchSubTopicsForTopic(topicId, collection);
         }
 
-        public List<Models.SubTopic> SearchSubTopicsForTopic(int topicId, NameValueCollection queryString)
+        public List<SubTopic> SearchSubTopicsForTopic(int topicId, NameValueCollection queryString)
         {
             var mapper = BuildMapperFromQueryString(queryString);
-            StoredProcedure = new GetSubTopicsForContext
-                {
-                    TopicID = topicId,
-                    InformationRecipient = mapper.GetInformationRecipient(),
-                    SearchCode = mapper.GetSearchCode(),
-                    SearchCodeSystem = mapper.GetSearchCodeSystem(),
-                    SearchTerm = mapper.GetSearchTerm(),
-                    Task = mapper.GetTaskCode(),
-                    SubTopicCode = mapper.GetSubTopicCode(),
-                    SubTopicCodeSystem = mapper.GetSubTopicCodeSystem(),
-                    SubTopicTerm = mapper.GetSubTopicTerm(),
-                    Gender = mapper.GetGender(),
-                    AgeGroup = mapper.GetAge(),
-                    PerformerLanguage = mapper.GetPerformerLanguage(),
-                    RecipientLanguage = mapper.GetRecipientLanguage(),
-                    PerformerProviderCode = mapper.GetPerformerProviderCode(),
-                    RecipientProviderCode = mapper.GetRecipientProviderCode(),
-                    EncounterCode = mapper.GetEncounterCode()
-                };
-            var result = Context.Database.ExecuteStoredProcedure(StoredProcedure as GetSubTopicsForContext).ToList();
-            return result;
+            return SubTopicRepository.GetSubTopicsForContext(topicId, mapper.GetInformationRecipient(), mapper.GetSearchCode(), mapper.GetSearchCodeSystem(), mapper.GetSearchTerm(),
+                mapper.GetTaskCode(), mapper.GetSubTopicCode(), mapper.GetSubTopicCodeSystem(), mapper.GetSubTopicTerm(), mapper.GetGender(), mapper.GetAge(),
+                mapper.GetPerformerLanguage(), mapper.GetRecipientLanguage(), mapper.GetPerformerProviderCode(), mapper.GetRecipientProviderCode(), mapper.GetEncounterCode());
         } 
         
         public QueryMapper BuildMapperFromQueryString(NameValueCollection queryString)

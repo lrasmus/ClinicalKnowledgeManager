@@ -4,28 +4,25 @@ using System.Linq;
 using System.Web.Mvc;
 using ClinicalKnowledgeManager.DB;
 using ClinicalKnowledgeManager.Helpers;
-using ClinicalKnowledgeManager.Lib;
-using ClinicalKnowledgeManager.Models;
 using ClinicalKnowledgeManager.ViewModels;
-using CodeFirstStoredProcedures;
-using HL7InfobuttonAPI;
 
 namespace ClinicalKnowledgeManager.Controllers
 {
     public class TopicsController : Controller
     {
-        private readonly ModelContext Context = new ModelContext();
+        private readonly TopicRepository Repository = null;
         private readonly ViewModelFactory Factory;
 
         public TopicsController()
         {
-            Factory = new ViewModelFactory(Context);
+            Factory = new ViewModelFactory(Repository);
+            Repository = new TopicRepository();
         }
 
         public TopicsController(string contextName)
         {
-            Context = new ModelContext(contextName);
-            Factory = new ViewModelFactory(Context);
+            Repository = new TopicRepository(contextName);
+            Factory = new ViewModelFactory(Repository);
         }
 
         //
@@ -33,15 +30,14 @@ namespace ClinicalKnowledgeManager.Controllers
 
         public ActionResult Index()
         {
-            return View(Factory.BuildTopicDetails(Context.Topics.ToList()));
+            return View(Factory.BuildTopicDetails(Repository.GetTopics()));
         }
 
         //
         // GET: /Topics/Search
         public ActionResult Search()
         {
-            var search = new TopicRequestSearch(Context);
-            var result = search.SearchTopics(Request.QueryString);
+            var result = Repository.SearchTopics(Request.QueryString);
 
             if (result.Count == 1)
             {
@@ -51,7 +47,7 @@ namespace ClinicalKnowledgeManager.Controllers
             return View(new TopicSearchResult
                 {
                 Topics = Factory.BuildTopicDetails(result.ToList()),
-                ContextQuery = search.StoredProcedure
+                //ContextQuery = search.StoredProcedure
                 });
         }
 
@@ -60,21 +56,20 @@ namespace ClinicalKnowledgeManager.Controllers
 
         public ActionResult Details(int id = 0)
         {
-            Topic topic = Context.Topics.Find(id);
+            Topic topic = Repository.GetTopicById(id);
             if (topic == null)
             {
                 return HttpNotFound();
             }
 
-            var search = new TopicRequestSearch(Context);
-            var result = search.SearchSubTopicsForTopic(id, Request.QueryString);
+            var result = Repository.SearchSubTopicsForTopic(id, Request.QueryString);
 
             var details = new TopicDetail
                 {
                     Topic = topic,
                     SubTopics = Factory.BuildSubTopicsForTopic(topic, null).ToList(),
                     ContextSubTopics = result,
-                    ContextQuery = search.StoredProcedure
+                    //ContextQuery = search.StoredProcedure
                 };
 
             foreach (var subTopic in details.SubTopics)
@@ -85,88 +80,82 @@ namespace ClinicalKnowledgeManager.Controllers
             return View(details);
         }
 
-        //
-        // GET: /Topics/Create
+        ////
+        //// GET: /Topics/Create
 
-        public ActionResult Create()
-        {
-            return View();
-        }
+        //public ActionResult Create()
+        //{
+        //    return View();
+        //}
 
-        //
-        // POST: /Topics/Create
+        ////
+        //// POST: /Topics/Create
 
-        [HttpPost]
-        public ActionResult Create(Topic topic)
-        {
-            if (ModelState.IsValid)
-            {
-                Context.Topics.Add(topic);
-                Context.SaveChanges();
-                return RedirectToAction("Index");
-            }
+        //[HttpPost]
+        //public ActionResult Create(Topic topic)
+        //{
+        //    if (ModelState.IsValid)
+        //    {
+        //        Repository.Add(topic);
+        //        return RedirectToAction("Index");
+        //    }
 
-            return View(topic);
-        }
+        //    return View(topic);
+        //}
 
-        //
-        // GET: /Topics/Edit/5
+        ////
+        //// GET: /Topics/Edit/5
 
-        public ActionResult Edit(int id = 0)
-        {
-            Topic topic = Context.Topics.Find(id);
-            if (topic == null)
-            {
-                return HttpNotFound();
-            }
-            return View(topic);
-        }
+        //public ActionResult Edit(int id = 0)
+        //{
+        //    Topic topic = Repository.GetById(id);
+        //    if (topic == null)
+        //    {
+        //        return HttpNotFound();
+        //    }
+        //    return View(topic);
+        //}
 
-        //
-        // POST: /Topics/Edit/5
+        ////
+        //// POST: /Topics/Edit/5
 
-        [HttpPost]
-        public ActionResult Edit(Topic topic)
-        {
-            if (ModelState.IsValid)
-            {
-                Context.Entry(topic).State = EntityState.Modified;
-                Context.SaveChanges();
-                return RedirectToAction("Index");
-            }
-            return View(topic);
-        }
+        //[HttpPost]
+        //public ActionResult Edit(Topic topic)
+        //{
+        //    if (ModelState.IsValid)
+        //    {
+        //        Repository.Update(topic);
+        //        //Context.Entry(topic).State = EntityState.Modified;
+        //        //Context.SaveChanges();
+        //        return RedirectToAction("Index");
+        //    }
+        //    return View(topic);
+        //}
 
-        //
-        // GET: /Topics/Delete/5
+        ////
+        //// GET: /Topics/Delete/5
 
-        public ActionResult Delete(int id = 0)
-        {
-            Topic topic = Context.Topics.Find(id);
-            if (topic == null)
-            {
-                return HttpNotFound();
-            }
-            return View(topic);
-        }
+        //public ActionResult Delete(int id = 0)
+        //{
+        //    Topic topic = Context.Topics.Find(id);
+        //    if (topic == null)
+        //    {
+        //        return HttpNotFound();
+        //    }
+        //    return View(topic);
+        //}
 
-        //
-        // POST: /Topics/Delete/5
+        ////
+        //// POST: /Topics/Delete/5
 
-        [HttpPost, ActionName("Delete")]
-        public ActionResult DeleteConfirmed(int id)
-        {
-            Topic topic = Context.Topics.Find(id);
-            Context.Topics.Remove(topic);
-            Context.SaveChanges();
-            return RedirectToAction("Index");
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            Context.Dispose();
-            base.Dispose(disposing);
-        }
+        //[HttpPost, ActionName("Delete")]
+        //public ActionResult DeleteConfirmed(int id)
+        //{
+        //    Topic topic = Context.Topics.Find(id);
+        //    Context.Topics.Remove(topic);
+        //    Context.SaveChanges();
+        //    return RedirectToAction("Index");
+        //}
 
         /// <summary>
         /// Recursively look at a subtopic and it's subtopics and determine if any of them should be visible because of

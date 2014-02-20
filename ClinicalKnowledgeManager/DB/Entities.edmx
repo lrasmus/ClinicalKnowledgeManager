@@ -1,0 +1,244 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="2.0" xmlns:edmx="http://schemas.microsoft.com/ado/2008/10/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="CKMDBModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
+        <EntityContainer Name="CKMDBModelStoreContainer">
+          <EntitySet Name="ConceptMaps" EntityType="CKMDBModel.Store.ConceptMaps" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="Contents" EntityType="CKMDBModel.Store.Contents" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="SubTopics" EntityType="CKMDBModel.Store.SubTopics" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="Topics" EntityType="CKMDBModel.Store.Topics" store:Type="Tables" Schema="dbo" />
+        </EntityContainer>
+        <EntityType Name="ConceptMaps">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="Code" Type="nvarchar" MaxLength="255" />
+          <Property Name="CodeSystem" Type="nvarchar" MaxLength="255" />
+          <Property Name="ParentId" Type="int" Nullable="false" />
+          <Property Name="ParentType" Type="nvarchar" MaxLength="50" />
+          <Property Name="Term" Type="nvarchar" MaxLength="255" />
+          <Property Name="CreatedOn" Type="datetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Contents">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="Value" Type="nvarchar(max)" />
+          <Property Name="ParentId" Type="int" Nullable="false" />
+          <Property Name="ParentType" Type="nvarchar" MaxLength="50" />
+          <Property Name="CreatedOn" Type="datetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="SubTopics">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="nvarchar" MaxLength="255" />
+          <Property Name="ParentId" Type="int" Nullable="false" />
+          <Property Name="ParentType" Type="nvarchar" MaxLength="50" />
+          <Property Name="CreatedOn" Type="datetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Topics">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="nvarchar" MaxLength="255" />
+          <Property Name="Audience" Type="nvarchar" MaxLength="50" />
+          <Property Name="InternalComments" Type="nvarchar(max)" />
+          <Property Name="CreatedOn" Type="datetime" Nullable="false" />
+        </EntityType>
+        <Function Name="spGetSubTopicsForContext" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="topic_id" Type="int" Mode="In" />
+          <Parameter Name="info_recipient" Type="nvarchar" Mode="In" />
+          <Parameter Name="search_code" Type="nvarchar" Mode="In" />
+          <Parameter Name="search_code_system" Type="nvarchar" Mode="In" />
+          <Parameter Name="search_term" Type="nvarchar" Mode="In" />
+          <Parameter Name="task" Type="nvarchar" Mode="In" />
+          <Parameter Name="sub_topic_code" Type="nvarchar" Mode="In" />
+          <Parameter Name="sub_topic_code_system" Type="nvarchar" Mode="In" />
+          <Parameter Name="sub_topic_term" Type="nvarchar" Mode="In" />
+          <Parameter Name="gender" Type="nvarchar" Mode="In" />
+          <Parameter Name="age_group" Type="nvarchar" Mode="In" />
+          <Parameter Name="performer_language_code" Type="nvarchar" Mode="In" />
+          <Parameter Name="recipient_language_code" Type="nvarchar" Mode="In" />
+          <Parameter Name="performer_provider_code" Type="nvarchar" Mode="In" />
+          <Parameter Name="recipient_provider_code" Type="nvarchar" Mode="In" />
+          <Parameter Name="encounter_code" Type="nvarchar" Mode="In" />
+        </Function>
+        <Function Name="spSearchForTopicsBasedOnContext" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="info_recipient" Type="nvarchar" Mode="In" />
+          <Parameter Name="search_code" Type="nvarchar" Mode="In" />
+          <Parameter Name="search_code_system" Type="nvarchar" Mode="In" />
+          <Parameter Name="search_term" Type="nvarchar" Mode="In" />
+          <Parameter Name="task" Type="nvarchar" Mode="In" />
+          <Parameter Name="sub_topic_code" Type="nvarchar" Mode="In" />
+          <Parameter Name="sub_topic_code_system" Type="nvarchar" Mode="In" />
+          <Parameter Name="sub_topic_term" Type="nvarchar" Mode="In" />
+          <Parameter Name="gender" Type="nvarchar" Mode="In" />
+          <Parameter Name="age_group" Type="nvarchar" Mode="In" />
+          <Parameter Name="performer_language_code" Type="nvarchar" Mode="In" />
+          <Parameter Name="recipient_language_code" Type="nvarchar" Mode="In" />
+          <Parameter Name="performer_provider_code" Type="nvarchar" Mode="In" />
+          <Parameter Name="recipient_provider_code" Type="nvarchar" Mode="In" />
+          <Parameter Name="encounter_code" Type="nvarchar" Mode="In" />
+        </Function>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="CKMDBModel" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
+        <EntityContainer Name="CKMDBEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="ConceptMaps" EntityType="CKMDBModel.ConceptMap" />
+          <EntitySet Name="Contents" EntityType="CKMDBModel.Content" />
+          <EntitySet Name="SubTopics" EntityType="CKMDBModel.SubTopic" />
+          <EntitySet Name="Topics" EntityType="CKMDBModel.Topic" />
+          <FunctionImport Name="GetSubTopicsForContext" EntitySet="SubTopics" ReturnType="Collection(CKMDBModel.SubTopic)">
+            <Parameter Name="topic_id" Mode="In" Type="Int32" />
+            <Parameter Name="info_recipient" Mode="In" Type="String" />
+            <Parameter Name="search_code" Mode="In" Type="String" />
+            <Parameter Name="search_code_system" Mode="In" Type="String" />
+            <Parameter Name="search_term" Mode="In" Type="String" />
+            <Parameter Name="task" Mode="In" Type="String" />
+            <Parameter Name="sub_topic_code" Mode="In" Type="String" />
+            <Parameter Name="sub_topic_code_system" Mode="In" Type="String" />
+            <Parameter Name="sub_topic_term" Mode="In" Type="String" />
+            <Parameter Name="gender" Mode="In" Type="String" />
+            <Parameter Name="age_group" Mode="In" Type="String" />
+            <Parameter Name="performer_language_code" Mode="In" Type="String" />
+            <Parameter Name="recipient_language_code" Mode="In" Type="String" />
+            <Parameter Name="performer_provider_code" Mode="In" Type="String" />
+            <Parameter Name="recipient_provider_code" Mode="In" Type="String" />
+            <Parameter Name="encounter_code" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="SearchForTopicsBasedOnContext" EntitySet="Topics" ReturnType="Collection(CKMDBModel.Topic)">
+            <Parameter Name="info_recipient" Mode="In" Type="String" />
+            <Parameter Name="search_code" Mode="In" Type="String" />
+            <Parameter Name="search_code_system" Mode="In" Type="String" />
+            <Parameter Name="search_term" Mode="In" Type="String" />
+            <Parameter Name="task" Mode="In" Type="String" />
+            <Parameter Name="sub_topic_code" Mode="In" Type="String" />
+            <Parameter Name="sub_topic_code_system" Mode="In" Type="String" />
+            <Parameter Name="sub_topic_term" Mode="In" Type="String" />
+            <Parameter Name="gender" Mode="In" Type="String" />
+            <Parameter Name="age_group" Mode="In" Type="String" />
+            <Parameter Name="performer_language_code" Mode="In" Type="String" />
+            <Parameter Name="recipient_language_code" Mode="In" Type="String" />
+            <Parameter Name="performer_provider_code" Mode="In" Type="String" />
+            <Parameter Name="recipient_provider_code" Mode="In" Type="String" />
+            <Parameter Name="encounter_code" Mode="In" Type="String" />
+          </FunctionImport>
+        </EntityContainer>
+        <EntityType Name="ConceptMap">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Code" Type="String" MaxLength="255" Unicode="true" FixedLength="false" />
+          <Property Name="CodeSystem" Type="String" MaxLength="255" Unicode="true" FixedLength="false" />
+          <Property Name="ParentId" Type="Int32" Nullable="false" />
+          <Property Name="ParentType" Type="String" MaxLength="50" Unicode="true" FixedLength="false" />
+          <Property Name="Term" Type="String" MaxLength="255" Unicode="true" FixedLength="false" />
+          <Property Name="CreatedOn" Type="DateTime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Content">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Value" Type="String" MaxLength="Max" Unicode="true" FixedLength="false" />
+          <Property Name="ParentId" Type="Int32" Nullable="false" />
+          <Property Name="ParentType" Type="String" MaxLength="50" Unicode="true" FixedLength="false" />
+          <Property Name="CreatedOn" Type="DateTime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="SubTopic">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="255" Unicode="true" FixedLength="false" />
+          <Property Name="ParentId" Type="Int32" Nullable="false" />
+          <Property Name="ParentType" Type="String" MaxLength="50" Unicode="true" FixedLength="false" />
+          <Property Name="CreatedOn" Type="DateTime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Topic">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="255" Unicode="true" FixedLength="false" />
+          <Property Name="Audience" Type="String" MaxLength="50" Unicode="true" FixedLength="false" />
+          <Property Name="InternalComments" Type="String" MaxLength="Max" Unicode="true" FixedLength="false" />
+          <Property Name="CreatedOn" Type="DateTime" Nullable="false" />
+        </EntityType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2008/09/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="CKMDBModelStoreContainer" CdmEntityContainer="CKMDBEntities">
+          <EntitySetMapping Name="ConceptMaps"><EntityTypeMapping TypeName="CKMDBModel.ConceptMap"><MappingFragment StoreEntitySet="ConceptMaps">
+            <ScalarProperty Name="Id" ColumnName="Id" />
+            <ScalarProperty Name="Code" ColumnName="Code" />
+            <ScalarProperty Name="CodeSystem" ColumnName="CodeSystem" />
+            <ScalarProperty Name="ParentId" ColumnName="ParentId" />
+            <ScalarProperty Name="ParentType" ColumnName="ParentType" />
+            <ScalarProperty Name="Term" ColumnName="Term" />
+            <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
+          </MappingFragment></EntityTypeMapping></EntitySetMapping>
+          <EntitySetMapping Name="Contents"><EntityTypeMapping TypeName="CKMDBModel.Content"><MappingFragment StoreEntitySet="Contents">
+            <ScalarProperty Name="Id" ColumnName="Id" />
+            <ScalarProperty Name="Value" ColumnName="Value" />
+            <ScalarProperty Name="ParentId" ColumnName="ParentId" />
+            <ScalarProperty Name="ParentType" ColumnName="ParentType" />
+            <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
+          </MappingFragment></EntityTypeMapping></EntitySetMapping>
+          <EntitySetMapping Name="SubTopics"><EntityTypeMapping TypeName="CKMDBModel.SubTopic"><MappingFragment StoreEntitySet="SubTopics">
+            <ScalarProperty Name="Id" ColumnName="Id" />
+            <ScalarProperty Name="Name" ColumnName="Name" />
+            <ScalarProperty Name="ParentId" ColumnName="ParentId" />
+            <ScalarProperty Name="ParentType" ColumnName="ParentType" />
+            <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
+          </MappingFragment></EntityTypeMapping></EntitySetMapping>
+          <EntitySetMapping Name="Topics"><EntityTypeMapping TypeName="CKMDBModel.Topic"><MappingFragment StoreEntitySet="Topics">
+            <ScalarProperty Name="Id" ColumnName="Id" />
+            <ScalarProperty Name="Name" ColumnName="Name" />
+            <ScalarProperty Name="Audience" ColumnName="Audience" />
+            <ScalarProperty Name="InternalComments" ColumnName="InternalComments" />
+            <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
+          </MappingFragment></EntityTypeMapping></EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="GetSubTopicsForContext" FunctionName="CKMDBModel.Store.spGetSubTopicsForContext" />
+          <FunctionImportMapping FunctionImportName="SearchForTopicsBasedOnContext" FunctionName="CKMDBModel.Store.spSearchForTopicsBasedOnContext" />
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2008/10/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="True" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams>
+      <Diagram Name="Entities">
+        <EntityTypeShape EntityType="CKMDBModel.ConceptMap" Width="1.5" PointX="0.75" PointY="0.75" Height="2.3648893229166665" IsExpanded="true" />
+        <EntityTypeShape EntityType="CKMDBModel.Content" Width="1.5" PointX="2.75" PointY="0.75" Height="1.9802864583333335" IsExpanded="true" />
+        <EntityTypeShape EntityType="CKMDBModel.SubTopic" Width="1.5" PointX="2.75" PointY="3.75" Height="1.9802864583333322" IsExpanded="true" />
+        <EntityTypeShape EntityType="CKMDBModel.Topic" Width="1.5" PointX="4.75" PointY="0.75" Height="1.9802864583333335" IsExpanded="true" />
+      </Diagram>
+    </Diagrams>
+  </Designer>
+</edmx:Edmx>

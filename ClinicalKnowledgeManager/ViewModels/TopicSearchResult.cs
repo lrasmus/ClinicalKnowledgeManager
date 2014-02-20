@@ -9,6 +9,6 @@ namespace ClinicalKnowledgeManager.ViewModels
     public class TopicSearchResult
     {
         public IEnumerable<TopicDetail> Topics { get; set; }
-        public IContextQuery ContextQuery { get; set; }
+        //public IContextQuery ContextQuery { get; set; }
     }
 }

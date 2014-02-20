@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using ClinicalKnowledgeManager.Models;
+using ClinicalKnowledgeManager.DB;
 
 namespace ClinicalKnowledgeManager.ViewModels
 {
