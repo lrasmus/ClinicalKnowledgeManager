@@ -13,11 +13,12 @@ namespace ClinicalKnowledgeManager.Controllers
 {
     public class SubTopicsController : Controller
     {
-        private TopicRepository Repository = new TopicRepository();
+        private TopicRepository Repository = null;
         private ViewModelFactory Factory = null;
 
         public SubTopicsController()
         {
+            Repository = new TopicRepository();
             Factory = new ViewModelFactory(Repository);
         }
         //

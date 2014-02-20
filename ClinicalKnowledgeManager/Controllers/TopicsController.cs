@@ -15,8 +15,8 @@ namespace ClinicalKnowledgeManager.Controllers
 
         public TopicsController()
         {
-            Factory = new ViewModelFactory(Repository);
             Repository = new TopicRepository();
+            Factory = new ViewModelFactory(Repository);
         }
 
         public TopicsController(string contextName)
