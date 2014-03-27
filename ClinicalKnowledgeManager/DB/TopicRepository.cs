@@ -140,5 +140,17 @@ namespace ClinicalKnowledgeManager.DB
         {
             return Context.Contents.Where(c => c.ParentType == itemType && c.ParentId == itemId).Select(c => c.Value).ToList();
         }
+
+        public void LogRequest(string clientDetails, string message)
+        {
+            CKMLog log = new CKMLog()
+                {
+                    ClientDetails = clientDetails,
+                    Message = message,
+                    CreatedOn = DateTime.Now
+                };
+            Context.CKMLogs.AddObject(log);
+            Context.SaveChanges();
+        }
     }
 }

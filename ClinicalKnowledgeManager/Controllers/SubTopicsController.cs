@@ -8,9 +8,11 @@ using System.Web.Mvc;
 using ClinicalKnowledgeManager.DB;
 using ClinicalKnowledgeManager.Helpers;
 using ClinicalKnowledgeManager.ViewModels;
+using ClinicalKnowledgeManager.Filters;
 
 namespace ClinicalKnowledgeManager.Controllers
 {
+    [LogFilter]
     public class SubTopicsController : Controller
     {
         private TopicRepository Repository = null;

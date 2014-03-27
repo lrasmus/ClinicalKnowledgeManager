@@ -135,6 +135,8 @@
     </Compile>
     <Compile Include="DB\BaseRepository.cs" />
     <Compile Include="DB\TopicRepository.cs" />
+    <Compile Include="Filters\ApiLogFilter.cs" />
+    <Compile Include="Filters\LogFilter.cs" />
     <Compile Include="Helpers\QueryMapper.cs" />
     <Compile Include="Helpers\ViewModelFactory.cs" />
     <Compile Include="Global.asax.cs">

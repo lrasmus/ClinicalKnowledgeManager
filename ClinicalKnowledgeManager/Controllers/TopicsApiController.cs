@@ -5,11 +5,13 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using ClinicalKnowledgeManager.DB;
+using ClinicalKnowledgeManager.Filters;
 using ClinicalKnowledgeManager.Helpers;
 using ClinicalKnowledgeManager.ViewModels;
 
 namespace ClinicalKnowledgeManager.Controllers
 {
+    [ApiLogFilter]
     public class TopicsApiController : ApiController
     {
         private readonly TopicRepository Repository = null;

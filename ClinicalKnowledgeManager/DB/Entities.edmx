@@ -6,11 +6,21 @@
     <edmx:StorageModels>
     <Schema Namespace="CKMDBModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
         <EntityContainer Name="CKMDBModelStoreContainer">
+          <EntitySet Name="CKMLogs" EntityType="CKMDBModel.Store.CKMLogs" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="ConceptMaps" EntityType="CKMDBModel.Store.ConceptMaps" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="Contents" EntityType="CKMDBModel.Store.Contents" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="SubTopics" EntityType="CKMDBModel.Store.SubTopics" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="Topics" EntityType="CKMDBModel.Store.Topics" store:Type="Tables" Schema="dbo" />
         </EntityContainer>
+        <EntityType Name="CKMLogs">
+          <Key>
+            <PropertyRef Name="LogId" />
+          </Key>
+          <Property Name="LogId" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="ClientDetails" Type="text" />
+          <Property Name="Message" Type="text" />
+          <Property Name="CreatedOn" Type="datetime" Nullable="false" />
+        </EntityType>
         <EntityType Name="ConceptMaps">
           <Key>
             <PropertyRef Name="Id" />
@@ -18,9 +28,9 @@
           <Property Name="Id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
           <Property Name="Code" Type="nvarchar" MaxLength="255" />
           <Property Name="CodeSystem" Type="nvarchar" MaxLength="255" />
+          <Property Name="Term" Type="nvarchar" MaxLength="255" />
           <Property Name="ParentId" Type="int" Nullable="false" />
           <Property Name="ParentType" Type="nvarchar" MaxLength="50" />
-          <Property Name="Term" Type="nvarchar" MaxLength="255" />
           <Property Name="CreatedOn" Type="datetime" Nullable="false" />
         </EntityType>
         <EntityType Name="Contents">
@@ -132,6 +142,7 @@
             <Parameter Name="recipient_provider_code" Mode="In" Type="String" />
             <Parameter Name="encounter_code" Mode="In" Type="String" />
           </FunctionImport>
+          <EntitySet Name="CKMLogs" EntityType="CKMDBModel.CKMLog" />
         </EntityContainer>
         <EntityType Name="ConceptMap">
           <Key>
@@ -175,6 +186,15 @@
           <Property Name="InternalComments" Type="String" MaxLength="Max" Unicode="true" FixedLength="false" />
           <Property Name="CreatedOn" Type="DateTime" Nullable="false" />
         </EntityType>
+        <EntityType Name="CKMLog">
+          <Key>
+            <PropertyRef Name="LogId" />
+          </Key>
+          <Property Type="Int32" Name="LogId" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="String" Name="ClientDetails" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Message" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Type="DateTime" Name="CreatedOn" Nullable="false" />
+        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -213,6 +233,16 @@
           </MappingFragment></EntityTypeMapping></EntitySetMapping>
           <FunctionImportMapping FunctionImportName="GetSubTopicsForContext" FunctionName="CKMDBModel.Store.spGetSubTopicsForContext" />
           <FunctionImportMapping FunctionImportName="SearchForTopicsBasedOnContext" FunctionName="CKMDBModel.Store.spSearchForTopicsBasedOnContext" />
+          <EntitySetMapping Name="CKMLogs">
+            <EntityTypeMapping TypeName="CKMDBModel.CKMLog">
+              <MappingFragment StoreEntitySet="CKMLogs">
+                <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
+                <ScalarProperty Name="Message" ColumnName="Message" />
+                <ScalarProperty Name="ClientDetails" ColumnName="ClientDetails" />
+                <ScalarProperty Name="LogId" ColumnName="LogId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
@@ -238,6 +268,7 @@
         <EntityTypeShape EntityType="CKMDBModel.Content" Width="1.5" PointX="2.75" PointY="0.75" Height="1.9802864583333335" IsExpanded="true" />
         <EntityTypeShape EntityType="CKMDBModel.SubTopic" Width="1.5" PointX="2.75" PointY="3.75" Height="1.9802864583333322" IsExpanded="true" />
         <EntityTypeShape EntityType="CKMDBModel.Topic" Width="1.5" PointX="4.75" PointY="0.75" Height="1.9802864583333335" IsExpanded="true" />
+        <EntityTypeShape EntityType="CKMDBModel.CKMLog" Width="1.5" PointX="5.375" PointY="3.75" Height="1.7879850260416674" />
       </Diagram>
     </Diagrams>
   </Designer>

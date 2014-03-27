@@ -128,6 +128,22 @@ namespace ClinicalKnowledgeManager.DB
             }
         }
         private ObjectSet<Topic> _Topics;
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        public ObjectSet<CKMLog> CKMLogs
+        {
+            get
+            {
+                if ((_CKMLogs == null))
+                {
+                    _CKMLogs = base.CreateObjectSet<CKMLog>("CKMLogs");
+                }
+                return _CKMLogs;
+            }
+        }
+        private ObjectSet<CKMLog> _CKMLogs;
 
         #endregion
         #region AddTo Methods
@@ -162,6 +178,14 @@ namespace ClinicalKnowledgeManager.DB
         public void AddToTopics(Topic topic)
         {
             base.AddObject("Topics", topic);
+        }
+    
+        /// <summary>
+        /// Deprecated Method for adding a new object to the CKMLogs EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
+        /// </summary>
+        public void AddToCKMLogs(CKMLog cKMLog)
+        {
+            base.AddObject("CKMLogs", cKMLog);
         }
 
         #endregion
@@ -888,6 +912,135 @@ namespace ClinicalKnowledgeManager.DB
     #endregion
     
     #region Entities
+    
+    /// <summary>
+    /// No Metadata Documentation available.
+    /// </summary>
+    [EdmEntityTypeAttribute(NamespaceName="CKMDBModel", Name="CKMLog")]
+    [Serializable()]
+    [DataContractAttribute(IsReference=true)]
+    public partial class CKMLog : EntityObject
+    {
+        #region Factory Method
+    
+        /// <summary>
+        /// Create a new CKMLog object.
+        /// </summary>
+        /// <param name="logId">Initial value of the LogId property.</param>
+        /// <param name="createdOn">Initial value of the CreatedOn property.</param>
+        public static CKMLog CreateCKMLog(global::System.Int32 logId, global::System.DateTime createdOn)
+        {
+            CKMLog cKMLog = new CKMLog();
+            cKMLog.LogId = logId;
+            cKMLog.CreatedOn = createdOn;
+            return cKMLog;
+        }
+
+        #endregion
+        #region Primitive Properties
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int32 LogId
+        {
+            get
+            {
+                return _LogId;
+            }
+            set
+            {
+                if (_LogId != value)
+                {
+                    OnLogIdChanging(value);
+                    ReportPropertyChanging("LogId");
+                    _LogId = StructuralObject.SetValidValue(value);
+                    ReportPropertyChanged("LogId");
+                    OnLogIdChanged();
+                }
+            }
+        }
+        private global::System.Int32 _LogId;
+        partial void OnLogIdChanging(global::System.Int32 value);
+        partial void OnLogIdChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String ClientDetails
+        {
+            get
+            {
+                return _ClientDetails;
+            }
+            set
+            {
+                OnClientDetailsChanging(value);
+                ReportPropertyChanging("ClientDetails");
+                _ClientDetails = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("ClientDetails");
+                OnClientDetailsChanged();
+            }
+        }
+        private global::System.String _ClientDetails;
+        partial void OnClientDetailsChanging(global::System.String value);
+        partial void OnClientDetailsChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String Message
+        {
+            get
+            {
+                return _Message;
+            }
+            set
+            {
+                OnMessageChanging(value);
+                ReportPropertyChanging("Message");
+                _Message = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("Message");
+                OnMessageChanged();
+            }
+        }
+        private global::System.String _Message;
+        partial void OnMessageChanging(global::System.String value);
+        partial void OnMessageChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.DateTime CreatedOn
+        {
+            get
+            {
+                return _CreatedOn;
+            }
+            set
+            {
+                OnCreatedOnChanging(value);
+                ReportPropertyChanging("CreatedOn");
+                _CreatedOn = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("CreatedOn");
+                OnCreatedOnChanged();
+            }
+        }
+        private global::System.DateTime _CreatedOn;
+        partial void OnCreatedOnChanging(global::System.DateTime value);
+        partial void OnCreatedOnChanged();
+
+        #endregion
+    
+    }
     
     /// <summary>
     /// No Metadata Documentation available.

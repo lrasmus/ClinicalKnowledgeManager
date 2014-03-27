@@ -3,11 +3,13 @@ using System.Data;
 using System.Linq;
 using System.Web.Mvc;
 using ClinicalKnowledgeManager.DB;
+using ClinicalKnowledgeManager.Filters;
 using ClinicalKnowledgeManager.Helpers;
 using ClinicalKnowledgeManager.ViewModels;
 
 namespace ClinicalKnowledgeManager.Controllers
 {
+    [LogFilter]
     public class TopicsController : Controller
     {
         private readonly TopicRepository Repository = null;
