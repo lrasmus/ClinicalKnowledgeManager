@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Web;
 using ClinicalKnowledgeManager.ViewModels;
@@ -100,8 +101,20 @@ namespace ClinicalKnowledgeManager.Helpers
             return new TopicDetail()
             {
                 Topic = topic,
-                SubTopics = BuildSubTopicsForTopic(topic, relevantSubTopics).ToList()
+                SubTopics = BuildSubTopicsForTopic(topic, relevantSubTopics).ToList(),
+                ShowTableOfContents = ShowTableOfContents()
             };
+        }
+
+        public bool ShowTableOfContents()
+        {
+            string showTOC = ConfigurationManager.AppSettings["ShowTOC"];
+            if (string.IsNullOrWhiteSpace(showTOC))
+            {
+                return true;
+            }
+
+            return (showTOC.Equals("true", StringComparison.CurrentCultureIgnoreCase));
         }
     }
 }

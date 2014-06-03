@@ -66,13 +66,8 @@ namespace ClinicalKnowledgeManager.Controllers
 
             var result = Repository.SearchSubTopicsForTopic(id, Request.QueryString);
 
-            var details = new TopicDetail
-                {
-                    Topic = topic,
-                    SubTopics = Factory.BuildSubTopicsForTopic(topic, null).ToList(),
-                    ContextSubTopics = result,
-                    //ContextQuery = search.StoredProcedure
-                };
+            var details = Factory.BuildTopicDetails(topic, null);
+            details.ContextSubTopics = result;
 
             foreach (var subTopic in details.SubTopics)
             {

@@ -9,9 +9,12 @@
 
 <table>
     <tr>
-        <td class="tableOfContents">
-            @Html.Partial("TableOfContents")
-        </td>
+        @if (@Model.ShowTableOfContents)
+        {
+            <td class="tableOfContents">
+                @Html.Partial("TableOfContents")
+            </td>
+        }
         <td>
             <div class="accordion">
                 @foreach (var item in Model.SubTopics) {
