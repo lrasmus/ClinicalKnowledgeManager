@@ -16,6 +16,10 @@
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <MvcBuildViews>false</MvcBuildViews>
     <UseIISExpress>false</UseIISExpress>
+    <IISExpressSSLPort />
+    <IISExpressAnonymousAuthentication />
+    <IISExpressWindowsAuthentication />
+    <IISExpressUseClassicPipelineMode />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -207,9 +211,10 @@
       <Generator>EntityModelCodeGenerator</Generator>
       <LastGenOutput>Entities.Designer.cs</LastGenOutput>
     </EntityDeploy>
-    <EmbeddedResource Include="DB\Scripts\SearchForTopicsBasedOnContext.sql" />
-    <EmbeddedResource Include="DB\Scripts\GetSubTopicsForContext.sql" />
     <EmbeddedResource Include="DB\Scripts\Dev-Setup.sql" />
+    <None Include="DB\Scripts\SearchForTopicsBasedOnContext.sql" />
+    <None Include="DB\Scripts\GetSubTopicsForContext.sql" />
+    <None Include="DB\Scripts\eMERGE-Data.sql" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
     <Content Include="Scripts\jquery.collapse.js" />

@@ -4,19 +4,12 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="CKMDBModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
-        <EntityContainer Name="CKMDBModelStoreContainer">
-          <EntitySet Name="CKMLogs" EntityType="CKMDBModel.Store.CKMLogs" store:Type="Tables" Schema="dbo" />
-          <EntitySet Name="ConceptMaps" EntityType="CKMDBModel.Store.ConceptMaps" store:Type="Tables" Schema="dbo" />
-          <EntitySet Name="Contents" EntityType="CKMDBModel.Store.Contents" store:Type="Tables" Schema="dbo" />
-          <EntitySet Name="SubTopics" EntityType="CKMDBModel.Store.SubTopics" store:Type="Tables" Schema="dbo" />
-          <EntitySet Name="Topics" EntityType="CKMDBModel.Store.Topics" store:Type="Tables" Schema="dbo" />
-        </EntityContainer>
+    <Schema Namespace="CKMDBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
         <EntityType Name="CKMLogs">
           <Key>
             <PropertyRef Name="LogId" />
           </Key>
-          <Property Name="LogId" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="LogId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="ClientDetails" Type="text" />
           <Property Name="Message" Type="text" />
           <Property Name="CreatedOn" Type="datetime" Nullable="false" />
@@ -25,7 +18,7 @@
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Code" Type="nvarchar" MaxLength="255" />
           <Property Name="CodeSystem" Type="nvarchar" MaxLength="255" />
           <Property Name="Term" Type="nvarchar" MaxLength="255" />
@@ -37,7 +30,7 @@
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Value" Type="nvarchar(max)" />
           <Property Name="ParentId" Type="int" Nullable="false" />
           <Property Name="ParentType" Type="nvarchar" MaxLength="50" />
@@ -47,22 +40,44 @@
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Name" Type="nvarchar" MaxLength="255" />
           <Property Name="ParentId" Type="int" Nullable="false" />
           <Property Name="ParentType" Type="nvarchar" MaxLength="50" />
+          <Property Name="CreatedOn" Type="datetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="TopicAliases">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="TopicId" Type="int" Nullable="false" />
+          <Property Name="Context" Type="nvarchar" MaxLength="1024" />
           <Property Name="CreatedOn" Type="datetime" Nullable="false" />
         </EntityType>
         <EntityType Name="Topics">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Name" Type="nvarchar" MaxLength="255" />
           <Property Name="Audience" Type="nvarchar" MaxLength="50" />
           <Property Name="InternalComments" Type="nvarchar(max)" />
           <Property Name="CreatedOn" Type="datetime" Nullable="false" />
         </EntityType>
+        <Association Name="FK_TopicAliases_Topics">
+          <End Role="Topics" Type="Self.Topics" Multiplicity="1" />
+          <End Role="TopicAliases" Type="Self.TopicAliases" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Topics">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="TopicAliases">
+              <PropertyRef Name="TopicId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Function Name="spGetSubTopicsForContext" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="topic_id" Type="int" Mode="In" />
           <Parameter Name="info_recipient" Type="nvarchar" Mode="In" />
@@ -98,6 +113,18 @@
           <Parameter Name="recipient_provider_code" Type="nvarchar" Mode="In" />
           <Parameter Name="encounter_code" Type="nvarchar" Mode="In" />
         </Function>
+        <EntityContainer Name="CKMDBModelStoreContainer">
+          <EntitySet Name="CKMLogs" EntityType="Self.CKMLogs" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ConceptMaps" EntityType="Self.ConceptMaps" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Contents" EntityType="Self.Contents" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="SubTopics" EntityType="Self.SubTopics" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TopicAliases" EntityType="Self.TopicAliases" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Topics" EntityType="Self.Topics" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_TopicAliases_Topics" Association="Self.FK_TopicAliases_Topics">
+            <End Role="Topics" EntitySet="Topics" />
+            <End Role="TopicAliases" EntitySet="TopicAliases" />
+          </AssociationSet>
+        </EntityContainer>
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
@@ -143,6 +170,11 @@
             <Parameter Name="encounter_code" Mode="In" Type="String" />
           </FunctionImport>
           <EntitySet Name="CKMLogs" EntityType="CKMDBModel.CKMLog" />
+          <EntitySet Name="TopicAliases" EntityType="CKMDBModel.TopicAlias" />
+          <AssociationSet Name="FK_TopicAliases_Topics" Association="CKMDBModel.FK_TopicAliases_Topics">
+            <End Role="Topic" EntitySet="Topics" />
+            <End Role="TopicAlias" EntitySet="TopicAliases" />
+          </AssociationSet>
         </EntityContainer>
         <EntityType Name="ConceptMap">
           <Key>
@@ -154,7 +186,7 @@
           <Property Name="ParentId" Type="Int32" Nullable="false" />
           <Property Name="ParentType" Type="String" MaxLength="50" Unicode="true" FixedLength="false" />
           <Property Name="Term" Type="String" MaxLength="255" Unicode="true" FixedLength="false" />
-          <Property Name="CreatedOn" Type="DateTime" Nullable="false" />
+          <Property Name="CreatedOn" Type="DateTime" Nullable="false" Precision="3" />
         </EntityType>
         <EntityType Name="Content">
           <Key>
@@ -164,7 +196,7 @@
           <Property Name="Value" Type="String" MaxLength="Max" Unicode="true" FixedLength="false" />
           <Property Name="ParentId" Type="Int32" Nullable="false" />
           <Property Name="ParentType" Type="String" MaxLength="50" Unicode="true" FixedLength="false" />
-          <Property Name="CreatedOn" Type="DateTime" Nullable="false" />
+          <Property Name="CreatedOn" Type="DateTime" Nullable="false" Precision="3" />
         </EntityType>
         <EntityType Name="SubTopic">
           <Key>
@@ -174,7 +206,7 @@
           <Property Name="Name" Type="String" MaxLength="255" Unicode="true" FixedLength="false" />
           <Property Name="ParentId" Type="Int32" Nullable="false" />
           <Property Name="ParentType" Type="String" MaxLength="50" Unicode="true" FixedLength="false" />
-          <Property Name="CreatedOn" Type="DateTime" Nullable="false" />
+          <Property Name="CreatedOn" Type="DateTime" Nullable="false" Precision="3" />
         </EntityType>
         <EntityType Name="Topic">
           <Key>
@@ -184,7 +216,8 @@
           <Property Name="Name" Type="String" MaxLength="255" Unicode="true" FixedLength="false" />
           <Property Name="Audience" Type="String" MaxLength="50" Unicode="true" FixedLength="false" />
           <Property Name="InternalComments" Type="String" MaxLength="Max" Unicode="true" FixedLength="false" />
-          <Property Name="CreatedOn" Type="DateTime" Nullable="false" />
+          <Property Name="CreatedOn" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="TopicAliases" Relationship="CKMDBModel.FK_TopicAliases_Topics" FromRole="Topic" ToRole="TopicAlias" />
         </EntityType>
         <EntityType Name="CKMLog">
           <Key>
@@ -193,8 +226,31 @@
           <Property Type="Int32" Name="LogId" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Type="String" Name="ClientDetails" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="Message" MaxLength="Max" FixedLength="false" Unicode="false" />
-          <Property Type="DateTime" Name="CreatedOn" Nullable="false" />
+          <Property Type="DateTime" Name="CreatedOn" Nullable="false" Precision="3" />
         </EntityType>
+        <EntityType Name="TopicAlias">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="TopicId" Type="Int32" Nullable="false" />
+          <Property Name="Context" Type="String" MaxLength="1024" FixedLength="false" Unicode="true" />
+          <Property Name="CreatedOn" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="Topic" Relationship="CKMDBModel.FK_TopicAliases_Topics" FromRole="TopicAlias" ToRole="Topic" />
+        </EntityType>
+        <Association Name="FK_TopicAliases_Topics">
+          <End Type="CKMDBModel.Topic" Role="Topic" Multiplicity="1" />
+          <End Type="CKMDBModel.TopicAlias" Role="TopicAlias" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Topic">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="TopicAlias">
+              <PropertyRef Name="TopicId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -243,6 +299,17 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="TopicAliases">
+            <EntityTypeMapping TypeName="CKMDBModel.TopicAlias">
+              <MappingFragment StoreEntitySet="TopicAliases">
+                <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
+                <ScalarProperty Name="Context" ColumnName="Context" />
+                <ScalarProperty Name="TopicId" ColumnName="TopicId" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
@@ -259,6 +326,7 @@
         <DesignerProperty Name="ValidateOnBuild" Value="true" />
         <DesignerProperty Name="EnablePluralization" Value="True" />
         <DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
+        <DesignerProperty Name="UseLegacyProvider" Value="True" />
       </DesignerInfoPropertySet>
     </Options>
     <!-- Diagram content (shape and connector positions) -->
@@ -269,6 +337,8 @@
         <EntityTypeShape EntityType="CKMDBModel.SubTopic" Width="1.5" PointX="2.75" PointY="3.75" Height="1.9802864583333322" IsExpanded="true" />
         <EntityTypeShape EntityType="CKMDBModel.Topic" Width="1.5" PointX="4.75" PointY="0.75" Height="1.9802864583333335" IsExpanded="true" />
         <EntityTypeShape EntityType="CKMDBModel.CKMLog" Width="1.5" PointX="5.375" PointY="3.75" Height="1.7879850260416674" />
+        <EntityTypeShape EntityType="CKMDBModel.TopicAlias" Width="1.5" PointX="7" PointY="0.75" />
+        <AssociationConnector Association="CKMDBModel.FK_TopicAliases_Topics" />
       </Diagram>
     </Diagrams>
   </Designer>

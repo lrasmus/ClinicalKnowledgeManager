@@ -29,12 +29,18 @@ namespace ClinicalKnowledgeManager.Tests
         {
             string sqlConnectionString = ConfigurationManager.ConnectionStrings["CKMDB.Test"].ConnectionString;
 
-            Assembly thisAssembly = Assembly.Load("ClinicalKnowledgeManager");
             SqlConnection conn = new SqlConnection(sqlConnectionString);
             Server server = new Server(new ServerConnection(conn));
-            string script = (new StreamReader(thisAssembly.GetManifestResourceStream("ClinicalKnowledgeManager.DB.Scripts.Dev-Setup.sql"))).ReadToEnd();
-            server.ConnectionContext.ExecuteNonQuery(script);
+            ExecuteSqlScript("ClinicalKnowledgeManager", "ClinicalKnowledgeManager.DB.Scripts.Dev-Setup.sql", server);
+            ExecuteSqlScript("ClinicalKnowledgeManager.Tests", "ClinicalKnowledgeManager.Tests.Test-Setup.sql", server);
             conn.Close();
+        }
+
+        private static void ExecuteSqlScript(string assembly, string resource, Server server)
+        {
+            Assembly thisAssembly = Assembly.Load(assembly);
+            string script = (new StreamReader(thisAssembly.GetManifestResourceStream(resource))).ReadToEnd();
+            server.ConnectionContext.ExecuteNonQuery(script);
         }
     }
 }

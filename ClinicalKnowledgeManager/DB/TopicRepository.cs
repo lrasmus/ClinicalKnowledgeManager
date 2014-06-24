@@ -152,5 +152,11 @@ namespace ClinicalKnowledgeManager.DB
             Context.CKMLogs.AddObject(log);
             Context.SaveChanges();
         }
+
+        public TopicAlias GetTopicAliasByName(string topicName)
+        {
+            string searchName = topicName.ToLower().Trim();
+            return Context.TopicAliases.FirstOrDefault(a => a.Name.Equals(searchName));
+        }
     }
 }

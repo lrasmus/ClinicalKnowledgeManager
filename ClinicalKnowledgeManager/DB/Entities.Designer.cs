@@ -8,14 +8,20 @@
 //------------------------------------------------------------------------------
 
 using System;
+using System.ComponentModel;
+using System.Data.EntityClient;
 using System.Data.Objects;
 using System.Data.Objects.DataClasses;
-using System.Data.EntityClient;
-using System.ComponentModel;
-using System.Xml.Serialization;
+using System.Linq;
 using System.Runtime.Serialization;
+using System.Xml.Serialization;
 
 [assembly: EdmSchemaAttribute()]
+#region EDM Relationship Metadata
+
+[assembly: EdmRelationshipAttribute("CKMDBModel", "FK_TopicAliases_Topics", "Topic", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(ClinicalKnowledgeManager.DB.Topic), "TopicAlias", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(ClinicalKnowledgeManager.DB.TopicAlias), true)]
+
+#endregion
 
 namespace ClinicalKnowledgeManager.DB
 {
@@ -144,8 +150,25 @@ namespace ClinicalKnowledgeManager.DB
             }
         }
         private ObjectSet<CKMLog> _CKMLogs;
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        public ObjectSet<TopicAlias> TopicAliases
+        {
+            get
+            {
+                if ((_TopicAliases == null))
+                {
+                    _TopicAliases = base.CreateObjectSet<TopicAlias>("TopicAliases");
+                }
+                return _TopicAliases;
+            }
+        }
+        private ObjectSet<TopicAlias> _TopicAliases;
 
         #endregion
+
         #region AddTo Methods
     
         /// <summary>
@@ -187,8 +210,17 @@ namespace ClinicalKnowledgeManager.DB
         {
             base.AddObject("CKMLogs", cKMLog);
         }
+    
+        /// <summary>
+        /// Deprecated Method for adding a new object to the TopicAliases EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
+        /// </summary>
+        public void AddToTopicAliases(TopicAlias topicAlias)
+        {
+            base.AddObject("TopicAliases", topicAlias);
+        }
 
         #endregion
+
         #region Function Imports
     
         /// <summary>
@@ -906,11 +938,11 @@ namespace ClinicalKnowledgeManager.DB
         }
 
         #endregion
+
     }
-    
 
     #endregion
-    
+
     #region Entities
     
     /// <summary>
@@ -937,6 +969,7 @@ namespace ClinicalKnowledgeManager.DB
         }
 
         #endregion
+
         #region Primitive Properties
     
         /// <summary>
@@ -1039,6 +1072,7 @@ namespace ClinicalKnowledgeManager.DB
         partial void OnCreatedOnChanged();
 
         #endregion
+
     
     }
     
@@ -1068,6 +1102,7 @@ namespace ClinicalKnowledgeManager.DB
         }
 
         #endregion
+
         #region Primitive Properties
     
         /// <summary>
@@ -1242,6 +1277,7 @@ namespace ClinicalKnowledgeManager.DB
         partial void OnCreatedOnChanged();
 
         #endregion
+
     
     }
     
@@ -1271,6 +1307,7 @@ namespace ClinicalKnowledgeManager.DB
         }
 
         #endregion
+
         #region Primitive Properties
     
         /// <summary>
@@ -1397,6 +1434,7 @@ namespace ClinicalKnowledgeManager.DB
         partial void OnCreatedOnChanged();
 
         #endregion
+
     
     }
     
@@ -1426,6 +1464,7 @@ namespace ClinicalKnowledgeManager.DB
         }
 
         #endregion
+
         #region Primitive Properties
     
         /// <summary>
@@ -1552,6 +1591,7 @@ namespace ClinicalKnowledgeManager.DB
         partial void OnCreatedOnChanged();
 
         #endregion
+
     
     }
     
@@ -1579,6 +1619,7 @@ namespace ClinicalKnowledgeManager.DB
         }
 
         #endregion
+
         #region Primitive Properties
     
         /// <summary>
@@ -1705,9 +1746,238 @@ namespace ClinicalKnowledgeManager.DB
         partial void OnCreatedOnChanged();
 
         #endregion
+
     
+        #region Navigation Properties
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("CKMDBModel", "FK_TopicAliases_Topics", "TopicAlias")]
+        public EntityCollection<TopicAlias> TopicAliases
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedCollection<TopicAlias>("CKMDBModel.FK_TopicAliases_Topics", "TopicAlias");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<TopicAlias>("CKMDBModel.FK_TopicAliases_Topics", "TopicAlias", value);
+                }
+            }
+        }
+
+        #endregion
+
+    }
+    
+    /// <summary>
+    /// No Metadata Documentation available.
+    /// </summary>
+    [EdmEntityTypeAttribute(NamespaceName="CKMDBModel", Name="TopicAlias")]
+    [Serializable()]
+    [DataContractAttribute(IsReference=true)]
+    public partial class TopicAlias : EntityObject
+    {
+        #region Factory Method
+    
+        /// <summary>
+        /// Create a new TopicAlias object.
+        /// </summary>
+        /// <param name="id">Initial value of the Id property.</param>
+        /// <param name="name">Initial value of the Name property.</param>
+        /// <param name="topicId">Initial value of the TopicId property.</param>
+        /// <param name="createdOn">Initial value of the CreatedOn property.</param>
+        public static TopicAlias CreateTopicAlias(global::System.Int32 id, global::System.String name, global::System.Int32 topicId, global::System.DateTime createdOn)
+        {
+            TopicAlias topicAlias = new TopicAlias();
+            topicAlias.Id = id;
+            topicAlias.Name = name;
+            topicAlias.TopicId = topicId;
+            topicAlias.CreatedOn = createdOn;
+            return topicAlias;
+        }
+
+        #endregion
+
+        #region Primitive Properties
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int32 Id
+        {
+            get
+            {
+                return _Id;
+            }
+            set
+            {
+                if (_Id != value)
+                {
+                    OnIdChanging(value);
+                    ReportPropertyChanging("Id");
+                    _Id = StructuralObject.SetValidValue(value);
+                    ReportPropertyChanged("Id");
+                    OnIdChanged();
+                }
+            }
+        }
+        private global::System.Int32 _Id;
+        partial void OnIdChanging(global::System.Int32 value);
+        partial void OnIdChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String Name
+        {
+            get
+            {
+                return _Name;
+            }
+            set
+            {
+                OnNameChanging(value);
+                ReportPropertyChanging("Name");
+                _Name = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("Name");
+                OnNameChanged();
+            }
+        }
+        private global::System.String _Name;
+        partial void OnNameChanging(global::System.String value);
+        partial void OnNameChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int32 TopicId
+        {
+            get
+            {
+                return _TopicId;
+            }
+            set
+            {
+                OnTopicIdChanging(value);
+                ReportPropertyChanging("TopicId");
+                _TopicId = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("TopicId");
+                OnTopicIdChanged();
+            }
+        }
+        private global::System.Int32 _TopicId;
+        partial void OnTopicIdChanging(global::System.Int32 value);
+        partial void OnTopicIdChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String Context
+        {
+            get
+            {
+                return _Context;
+            }
+            set
+            {
+                OnContextChanging(value);
+                ReportPropertyChanging("Context");
+                _Context = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("Context");
+                OnContextChanged();
+            }
+        }
+        private global::System.String _Context;
+        partial void OnContextChanging(global::System.String value);
+        partial void OnContextChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.DateTime CreatedOn
+        {
+            get
+            {
+                return _CreatedOn;
+            }
+            set
+            {
+                OnCreatedOnChanging(value);
+                ReportPropertyChanging("CreatedOn");
+                _CreatedOn = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("CreatedOn");
+                OnCreatedOnChanged();
+            }
+        }
+        private global::System.DateTime _CreatedOn;
+        partial void OnCreatedOnChanging(global::System.DateTime value);
+        partial void OnCreatedOnChanged();
+
+        #endregion
+
+    
+        #region Navigation Properties
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("CKMDBModel", "FK_TopicAliases_Topics", "Topic")]
+        public Topic Topic
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<Topic>("CKMDBModel.FK_TopicAliases_Topics", "Topic").Value;
+            }
+            set
+            {
+                ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<Topic>("CKMDBModel.FK_TopicAliases_Topics", "Topic").Value = value;
+            }
+        }
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [BrowsableAttribute(false)]
+        [DataMemberAttribute()]
+        public EntityReference<Topic> TopicReference
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<Topic>("CKMDBModel.FK_TopicAliases_Topics", "Topic");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedReference<Topic>("CKMDBModel.FK_TopicAliases_Topics", "Topic", value);
+                }
+            }
+        }
+
+        #endregion
+
     }
 
     #endregion
+
     
 }

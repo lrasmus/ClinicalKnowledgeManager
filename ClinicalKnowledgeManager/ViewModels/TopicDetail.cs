@@ -9,6 +9,5 @@ namespace ClinicalKnowledgeManager.ViewModels
         public bool ShowTableOfContents { get; set; }
         public IEnumerable<SubTopicDetail> SubTopics { get; set; }
         public IEnumerable<SubTopic> ContextSubTopics { get; set; }
-        //public IContextQuery ContextQuery { get; set; }
     }
 }

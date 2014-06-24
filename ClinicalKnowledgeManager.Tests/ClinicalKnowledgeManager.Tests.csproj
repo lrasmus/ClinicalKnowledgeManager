@@ -116,7 +116,10 @@
     <Compile Include="DB\SearchForTopicsBasedOnContextTests.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="App.config" />
+    <Content Include="App.config">
+      <SubType>Designer</SubType>
+    </Content>
+    <EmbeddedResource Include="Test-Setup.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
