@@ -53,6 +53,7 @@ namespace ClinicalKnowledgeManager.Tests.Controllers
             SetControllerContext(controller, "mainSearchCriteria.v.dn=clopidogrel%20metabolism");
             var result = controller.Search() as RedirectResult;
             Assert.IsNotNull(result);
+            Assert.IsTrue(result.Url.Contains("mainSearchCriteria.v.dn=clopidogrel%20metabolism"));
         }
 
         [TestMethod]
@@ -163,6 +164,7 @@ namespace ClinicalKnowledgeManager.Tests.Controllers
             Assert.IsNotNull(result);
             var model = result.Model as TopicSearchResult;
             Assert.AreEqual(2, model.Topics.Count());
+            Assert.AreEqual("Search", result.ViewName);
         }
 
         private void SetControllerContext(Controller controller, string queryString)
@@ -170,6 +172,7 @@ namespace ClinicalKnowledgeManager.Tests.Controllers
             Mock<HttpRequestBase> request = new Mock<HttpRequestBase>();
             var testQueryString = HttpUtility.ParseQueryString(queryString);
             request.SetupGet(req => req.QueryString).Returns(testQueryString);
+            request.SetupGet(req => req.RawUrl).Returns("http://test/" + (string.IsNullOrWhiteSpace(queryString) ? string.Empty : "?" + queryString));
             Mock<HttpContextBase> context = new Mock<HttpContextBase>();
             context.Setup(ctx => ctx.Request).Returns(request.Object);
             controller.ControllerContext = new ControllerContext(context.Object, new RouteData(), controller);

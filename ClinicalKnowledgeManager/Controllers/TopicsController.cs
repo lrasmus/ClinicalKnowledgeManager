@@ -42,7 +42,13 @@ namespace ClinicalKnowledgeManager.Controllers
         // GET: /Topics/Search
         public ActionResult Search()
         {
-            return ExecuteSearch(Request.QueryString);
+            string urlParams = "";
+            string[] urlParts = Request.RawUrl.Split('?');
+            if (urlParts.Length > 1)
+            {
+                urlParams = string.Join("?", urlParts.Skip(1));
+            }
+            return ExecuteSearch(Request.QueryString, urlParams);
         }
 
         //
@@ -51,11 +57,11 @@ namespace ClinicalKnowledgeManager.Controllers
         {
             int topicId = 0;
             Topic topic = null;
-            var queryString = new NameValueCollection();
+            var queryParams = new NameValueCollection();
             if (int.TryParse(id, out topicId))
             {
                 topic = Repository.GetTopicById(topicId);
-                queryString = Request.QueryString;
+                queryParams = Request.QueryString;
             }
             else 
             {
@@ -64,12 +70,12 @@ namespace ClinicalKnowledgeManager.Controllers
                 {
                     if (!string.IsNullOrWhiteSpace(alias.Context))
                     {
-                        queryString = Parser.SplitStringParameters(alias.Context);
+                        queryParams = Parser.SplitStringParameters(alias.Context);
                     }
 
                     if (!alias.TopicId.HasValue)
                     {
-                        return ExecuteSearch(queryString);
+                        return ExecuteSearch(queryParams, alias.Context);
                     }
 
                     topicId = alias.TopicId.Value;
@@ -82,7 +88,7 @@ namespace ClinicalKnowledgeManager.Controllers
                 return HttpNotFound();
             }
 
-            var result = Repository.SearchSubTopicsForTopic(topicId, queryString);
+            var result = Repository.SearchSubTopicsForTopic(topicId, queryParams);
 
             var details = Factory.BuildTopicDetails(topic, null);
             details.ContextSubTopics = result;
@@ -118,13 +124,13 @@ namespace ClinicalKnowledgeManager.Controllers
             return detail.IsContextItem;
         }
 
-        private ActionResult ExecuteSearch(NameValueCollection queryString)
+        private ActionResult ExecuteSearch(NameValueCollection queryParams, string queryString)
         {
-            var result = Repository.SearchTopics(queryString);
+            var result = Repository.SearchTopics(queryParams);
 
             if (result.Count == 1)
             {
-                return Redirect(Url.Action("Details", new { id = result.First().Id }) + "?" + queryString);
+                return Redirect(Url.Action("Details", new { id = result.First().Id }) + (string.IsNullOrWhiteSpace(queryString) ? string.Empty : ("?" + queryString)));
             }
 
             return View("Search", new TopicSearchResult { Topics = Factory.BuildTopicDetails(result.ToList()) });
