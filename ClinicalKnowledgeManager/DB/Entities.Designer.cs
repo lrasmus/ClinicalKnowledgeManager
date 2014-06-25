@@ -17,12 +17,6 @@ using System.Runtime.Serialization;
 using System.Xml.Serialization;
 
 [assembly: EdmSchemaAttribute()]
-#region EDM Relationship Metadata
-
-[assembly: EdmRelationshipAttribute("CKMDBModel", "FK_TopicAliases_Topics", "Topic", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(ClinicalKnowledgeManager.DB.Topic), "TopicAlias", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(ClinicalKnowledgeManager.DB.TopicAlias), true)]
-
-#endregion
-
 namespace ClinicalKnowledgeManager.DB
 {
     #region Contexts
@@ -1748,32 +1742,6 @@ namespace ClinicalKnowledgeManager.DB
         #endregion
 
     
-        #region Navigation Properties
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [XmlIgnoreAttribute()]
-        [SoapIgnoreAttribute()]
-        [DataMemberAttribute()]
-        [EdmRelationshipNavigationPropertyAttribute("CKMDBModel", "FK_TopicAliases_Topics", "TopicAlias")]
-        public EntityCollection<TopicAlias> TopicAliases
-        {
-            get
-            {
-                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedCollection<TopicAlias>("CKMDBModel.FK_TopicAliases_Topics", "TopicAlias");
-            }
-            set
-            {
-                if ((value != null))
-                {
-                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<TopicAlias>("CKMDBModel.FK_TopicAliases_Topics", "TopicAlias", value);
-                }
-            }
-        }
-
-        #endregion
-
     }
     
     /// <summary>
@@ -1791,14 +1759,12 @@ namespace ClinicalKnowledgeManager.DB
         /// </summary>
         /// <param name="id">Initial value of the Id property.</param>
         /// <param name="name">Initial value of the Name property.</param>
-        /// <param name="topicId">Initial value of the TopicId property.</param>
         /// <param name="createdOn">Initial value of the CreatedOn property.</param>
-        public static TopicAlias CreateTopicAlias(global::System.Int32 id, global::System.String name, global::System.Int32 topicId, global::System.DateTime createdOn)
+        public static TopicAlias CreateTopicAlias(global::System.Int32 id, global::System.String name, global::System.DateTime createdOn)
         {
             TopicAlias topicAlias = new TopicAlias();
             topicAlias.Id = id;
             topicAlias.Name = name;
-            topicAlias.TopicId = topicId;
             topicAlias.CreatedOn = createdOn;
             return topicAlias;
         }
@@ -1861,9 +1827,9 @@ namespace ClinicalKnowledgeManager.DB
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
-        public global::System.Int32 TopicId
+        public Nullable<global::System.Int32> TopicId
         {
             get
             {
@@ -1878,8 +1844,8 @@ namespace ClinicalKnowledgeManager.DB
                 OnTopicIdChanged();
             }
         }
-        private global::System.Int32 _TopicId;
-        partial void OnTopicIdChanging(global::System.Int32 value);
+        private Nullable<global::System.Int32> _TopicId;
+        partial void OnTopicIdChanging(Nullable<global::System.Int32> value);
         partial void OnTopicIdChanged();
     
         /// <summary>
@@ -1933,48 +1899,6 @@ namespace ClinicalKnowledgeManager.DB
         #endregion
 
     
-        #region Navigation Properties
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [XmlIgnoreAttribute()]
-        [SoapIgnoreAttribute()]
-        [DataMemberAttribute()]
-        [EdmRelationshipNavigationPropertyAttribute("CKMDBModel", "FK_TopicAliases_Topics", "Topic")]
-        public Topic Topic
-        {
-            get
-            {
-                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<Topic>("CKMDBModel.FK_TopicAliases_Topics", "Topic").Value;
-            }
-            set
-            {
-                ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<Topic>("CKMDBModel.FK_TopicAliases_Topics", "Topic").Value = value;
-            }
-        }
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [BrowsableAttribute(false)]
-        [DataMemberAttribute()]
-        public EntityReference<Topic> TopicReference
-        {
-            get
-            {
-                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<Topic>("CKMDBModel.FK_TopicAliases_Topics", "Topic");
-            }
-            set
-            {
-                if ((value != null))
-                {
-                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedReference<Topic>("CKMDBModel.FK_TopicAliases_Topics", "Topic", value);
-                }
-            }
-        }
-
-        #endregion
-
     }
 
     #endregion

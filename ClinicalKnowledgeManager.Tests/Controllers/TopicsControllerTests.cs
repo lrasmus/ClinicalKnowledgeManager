@@ -154,6 +154,17 @@ namespace ClinicalKnowledgeManager.Tests.Controllers
             Assert.IsFalse(subTopics[1].SubTopics.ToList()[1].IsContextItem);
         }
 
+        [TestMethod]
+        public void Details_Alias_MultipleResults()
+        {
+            var controller = new TopicsController(ContextName);
+            SetControllerContext(controller, "");
+            var result = controller.Details("clopidogrel") as ViewResult;
+            Assert.IsNotNull(result);
+            var model = result.Model as TopicSearchResult;
+            Assert.AreEqual(2, model.Topics.Count());
+        }
+
         private void SetControllerContext(Controller controller, string queryString)
         {
             Mock<HttpRequestBase> request = new Mock<HttpRequestBase>();

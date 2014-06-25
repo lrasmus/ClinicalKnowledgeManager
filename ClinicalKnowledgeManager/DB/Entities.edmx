@@ -52,7 +52,7 @@
           </Key>
           <Property Name="Id" Type="int" Nullable="false" />
           <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
-          <Property Name="TopicId" Type="int" Nullable="false" />
+          <Property Name="TopicId" Type="int" />
           <Property Name="Context" Type="nvarchar" MaxLength="1024" />
           <Property Name="CreatedOn" Type="datetime" Nullable="false" />
         </EntityType>
@@ -66,18 +66,6 @@
           <Property Name="InternalComments" Type="nvarchar(max)" />
           <Property Name="CreatedOn" Type="datetime" Nullable="false" />
         </EntityType>
-        <Association Name="FK_TopicAliases_Topics">
-          <End Role="Topics" Type="Self.Topics" Multiplicity="1" />
-          <End Role="TopicAliases" Type="Self.TopicAliases" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Topics">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="TopicAliases">
-              <PropertyRef Name="TopicId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Function Name="spGetSubTopicsForContext" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="topic_id" Type="int" Mode="In" />
           <Parameter Name="info_recipient" Type="nvarchar" Mode="In" />
@@ -120,10 +108,6 @@
           <EntitySet Name="SubTopics" EntityType="Self.SubTopics" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="TopicAliases" EntityType="Self.TopicAliases" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Topics" EntityType="Self.Topics" Schema="dbo" store:Type="Tables" />
-          <AssociationSet Name="FK_TopicAliases_Topics" Association="Self.FK_TopicAliases_Topics">
-            <End Role="Topics" EntitySet="Topics" />
-            <End Role="TopicAliases" EntitySet="TopicAliases" />
-          </AssociationSet>
         </EntityContainer>
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
@@ -171,10 +155,6 @@
           </FunctionImport>
           <EntitySet Name="CKMLogs" EntityType="CKMDBModel.CKMLog" />
           <EntitySet Name="TopicAliases" EntityType="CKMDBModel.TopicAlias" />
-          <AssociationSet Name="FK_TopicAliases_Topics" Association="CKMDBModel.FK_TopicAliases_Topics">
-            <End Role="Topic" EntitySet="Topics" />
-            <End Role="TopicAlias" EntitySet="TopicAliases" />
-          </AssociationSet>
         </EntityContainer>
         <EntityType Name="ConceptMap">
           <Key>
@@ -217,7 +197,6 @@
           <Property Name="Audience" Type="String" MaxLength="50" Unicode="true" FixedLength="false" />
           <Property Name="InternalComments" Type="String" MaxLength="Max" Unicode="true" FixedLength="false" />
           <Property Name="CreatedOn" Type="DateTime" Nullable="false" Precision="3" />
-          <NavigationProperty Name="TopicAliases" Relationship="CKMDBModel.FK_TopicAliases_Topics" FromRole="Topic" ToRole="TopicAlias" />
         </EntityType>
         <EntityType Name="CKMLog">
           <Key>
@@ -234,23 +213,10 @@
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" />
           <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="TopicId" Type="Int32" Nullable="false" />
+          <Property Name="TopicId" Type="Int32" />
           <Property Name="Context" Type="String" MaxLength="1024" FixedLength="false" Unicode="true" />
           <Property Name="CreatedOn" Type="DateTime" Nullable="false" Precision="3" />
-          <NavigationProperty Name="Topic" Relationship="CKMDBModel.FK_TopicAliases_Topics" FromRole="TopicAlias" ToRole="Topic" />
         </EntityType>
-        <Association Name="FK_TopicAliases_Topics">
-          <End Type="CKMDBModel.Topic" Role="Topic" Multiplicity="1" />
-          <End Type="CKMDBModel.TopicAlias" Role="TopicAlias" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Topic">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="TopicAlias">
-              <PropertyRef Name="TopicId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -338,7 +304,6 @@
         <EntityTypeShape EntityType="CKMDBModel.Topic" Width="1.5" PointX="4.75" PointY="0.75" Height="1.9802864583333335" IsExpanded="true" />
         <EntityTypeShape EntityType="CKMDBModel.CKMLog" Width="1.5" PointX="5.375" PointY="3.75" Height="1.7879850260416674" />
         <EntityTypeShape EntityType="CKMDBModel.TopicAlias" Width="1.5" PointX="7" PointY="0.75" />
-        <AssociationConnector Association="CKMDBModel.FK_TopicAliases_Topics" />
       </Diagram>
     </Diagrams>
   </Designer>

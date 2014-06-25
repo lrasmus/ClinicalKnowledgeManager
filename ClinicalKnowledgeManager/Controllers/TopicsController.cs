@@ -42,14 +42,7 @@ namespace ClinicalKnowledgeManager.Controllers
         // GET: /Topics/Search
         public ActionResult Search()
         {
-            var result = Repository.SearchTopics(Request.QueryString);
-
-            if (result.Count == 1)
-            {
-                return Redirect(Url.Action("Details", new { id = result.First().Id }) + "?" + Request.QueryString);
-            }
-
-            return View(new TopicSearchResult { Topics = Factory.BuildTopicDetails(result.ToList()) });
+            return ExecuteSearch(Request.QueryString);
         }
 
         //
@@ -64,16 +57,23 @@ namespace ClinicalKnowledgeManager.Controllers
                 topic = Repository.GetTopicById(topicId);
                 queryString = Request.QueryString;
             }
-            else {
+            else 
+            {
                 TopicAlias alias = Repository.GetTopicAliasByName(id);
                 if (alias != null)
                 {
-                    topicId = alias.TopicId;
-                    topic = alias.Topic;
                     if (!string.IsNullOrWhiteSpace(alias.Context))
                     {
                         queryString = Parser.SplitStringParameters(alias.Context);
                     }
+
+                    if (!alias.TopicId.HasValue)
+                    {
+                        return ExecuteSearch(queryString);
+                    }
+
+                    topicId = alias.TopicId.Value;
+                    topic = Repository.GetTopicById(topicId);
                 }
             }
 
@@ -118,5 +118,16 @@ namespace ClinicalKnowledgeManager.Controllers
             return detail.IsContextItem;
         }
 
+        private ActionResult ExecuteSearch(NameValueCollection queryString)
+        {
+            var result = Repository.SearchTopics(queryString);
+
+            if (result.Count == 1)
+            {
+                return Redirect(Url.Action("Details", new { id = result.First().Id }) + "?" + queryString);
+            }
+
+            return View("Search", new TopicSearchResult { Topics = Factory.BuildTopicDetails(result.ToList()) });
+        }
     }
 }
